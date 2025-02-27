@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { fetchPlaylistVideos } from "@/lib/youtube-service"
+import { fetchPlaylistVideos, YouTubeVideo } from "@/lib/youtube-service"
 import { YouTubeVideoCard } from "./youtube-video-card"
 import { motion } from "framer-motion"
 import { Skeleton } from "@/components/ui/skeleton"
@@ -13,8 +13,8 @@ interface YouTubeVideosSectionProps {
 }
 
 export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId, apiKey }: YouTubeVideosSectionProps) {
-  const [regularVideos, setRegularVideos] = useState([])
-  const [shortsVideos, setShortsVideos] = useState([])
+  const [regularVideos, setRegularVideos] = useState<YouTubeVideo[]>([])
+  const [shortsVideos, setShortsVideos] = useState<YouTubeVideo[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
