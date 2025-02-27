@@ -2,7 +2,6 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-// Make sure the import for ServiceWorkerRegister is correct
 import { ServiceWorkerRegister } from "./sw-register"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -45,8 +44,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg",
-        width: 1200,
-        height: 630,
+        width: 2048,
+        height: 819,
         alt: "Un Café con JJ - Jimmy Jairala",
       },
     ],
@@ -92,7 +91,6 @@ export const metadata: Metadata = {
   },
 }
 
-// Also ensure the body has proper error boundaries
 export default function RootLayout({
   children,
 }: {
