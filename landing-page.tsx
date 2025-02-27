@@ -13,7 +13,6 @@ import { StructuredData } from "./components/structured-data"
 import { TopBanner } from "./components/top-banner"
 import { TwitterTimeline } from "./components/twitter-timeline"
 import { InstagramPosts } from "./components/instagram-posts"
-import { SkipLink } from "./components/skip-link"
 import { Suspense } from "react"
 import { LiveStreamPlayer } from "./components/live-stream-player"
 
@@ -27,7 +26,6 @@ export default function LandingPage() {
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-[#1a1a2e]">
-      <SkipLink />
       <StructuredData />
       <TopBanner />
       {/* Header */}
@@ -97,86 +95,81 @@ export default function LandingPage() {
 
       <main id="main-content" className="flex-1" role="main">
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-24 lg:py-32 border-b border-[#e9b11a]/20" aria-labelledby="hero-title">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
-              <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
+        <section className="w-full border-b border-[#e9b11a]/20" aria-labelledby="hero-title">
+          <div className="relative w-full h-[calc(100vh-4rem)] min-h-[600px]">
+            <Image
+              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg"
+              layout="fill"
+              objectFit="cover"
+              alt="Jimmy Jairala presentando Un Café con JJ"
+              priority
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center">
+              <div className="container px-4 md:px-6">
+                <div className="max-w-[600px]">
                   <h1
                     id="hero-title"
-                    className="text-3xl font-bold tracking-tighter text-white sm:text-5xl xl:text-6xl/none"
+                    className="text-3xl font-bold tracking-tighter text-white sm:text-5xl xl:text-6xl/none mb-4"
                   >
                     Un Café con <span className="text-[#e9b11a]">JJ</span>
                   </h1>
-                  <p className="max-w-[600px] text-[#e9b11a] md:text-xl">TRINCHERA DEL PENSAMIENTO LIBRE</p>
-                  <p className="max-w-[600px] text-gray-400 md:text-xl">
-                    Noticias, análisis y opinión con Jimmy Jairala.
-                  </p>
+                  <p className="text-[#e9b11a] md:text-xl mb-2">TRINCHERA DEL PENSAMIENTO LIBRE</p>
+                  <p className="text-gray-200 md:text-xl mb-6">Noticias, análisis y opinión con Jimmy Jairala.</p>
+                  <div className="flex flex-col gap-2 sm:flex-row mb-6">
+                    <Button
+                      size="lg"
+                      className="h-12 bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
+                      onClick={() => scrollToSection("en-vivo")}
+                    >
+                      VER EN VIVO
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="h-12 text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
+                      onClick={() => scrollToSection("programa")}
+                    >
+                      PROGRAMACIÓN
+                    </Button>
+                  </div>
+                  <div className="flex flex-wrap gap-4" role="list" aria-label="Redes sociales">
+                    <Link
+                      href="https://facebook.com/uncafeconjj"
+                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
+                      aria-label="Síguenos en Facebook"
+                    >
+                      <Facebook className="h-6 w-6" aria-hidden="true" />
+                    </Link>
+                    <Link
+                      href="https://instagram.com/uncafeconjj"
+                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
+                      aria-label="Síguenos en Instagram"
+                    >
+                      <Instagram className="h-6 w-6" aria-hidden="true" />
+                    </Link>
+                    <Link
+                      href="https://youtube.com/uncafeconjj"
+                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
+                      aria-label="Síguenos en YouTube"
+                    >
+                      <Youtube className="h-6 w-6" aria-hidden="true" />
+                    </Link>
+                    <Link
+                      href="https://twitter.com/uncafeconjj"
+                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
+                      aria-label="Síguenos en Twitter"
+                    >
+                      <Twitter className="h-6 w-6" aria-hidden="true" />
+                    </Link>
+                    <Link
+                      href="#"
+                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
+                      aria-label="Síguenos en TikTok"
+                    >
+                      <TikTok className="h-6 w-6" aria-hidden="true" />
+                    </Link>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <Button
-                    size="lg"
-                    className="h-12 bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
-                    onClick={() => scrollToSection("en-vivo")}
-                  >
-                    VER EN VIVO
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="h-12 text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
-                    onClick={() => scrollToSection("programa")}
-                  >
-                    PROGRAMACIÓN
-                  </Button>
-                </div>
-                <div className="flex flex-wrap gap-4 pt-4" role="list" aria-label="Redes sociales">
-                  <Link
-                    href="https://facebook.com/uncafeconjj"
-                    className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
-                    aria-label="Síguenos en Facebook"
-                  >
-                    <Facebook className="h-6 w-6" aria-hidden="true" />
-                  </Link>
-                  <Link
-                    href="https://instagram.com/uncafeconjj"
-                    className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
-                    aria-label="Síguenos en Instagram"
-                  >
-                    <Instagram className="h-6 w-6" aria-hidden="true" />
-                  </Link>
-                  <Link
-                    href="https://youtube.com/uncafeconjj"
-                    className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
-                    aria-label="Síguenos en YouTube"
-                  >
-                    <Youtube className="h-6 w-6" aria-hidden="true" />
-                  </Link>
-                  <Link
-                    href="https://twitter.com/uncafeconjj"
-                    className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
-                    aria-label="Síguenos en Twitter"
-                  >
-                    <Twitter className="h-6 w-6" aria-hidden="true" />
-                  </Link>
-                  <Link
-                    href="#"
-                    className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
-                    aria-label="Síguenos en TikTok"
-                  >
-                    <TikTok className="h-6 w-6" aria-hidden="true" />
-                  </Link>
-                </div>
-              </div>
-              <div className="flex items-center justify-center">
-                <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg"
-                  width={2048}
-                  height={819}
-                  alt="Jimmy Jairala presentando Un Café con JJ"
-                  className="rounded-lg object-cover w-full h-auto"
-                  priority
-                />
               </div>
             </div>
           </div>
