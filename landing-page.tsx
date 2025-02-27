@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -16,6 +18,13 @@ import { SkipLink } from "./components/skip-link"
 import { Suspense } from "react"
 
 export default function LandingPage() {
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
   return (
     <div className="flex min-h-[100dvh] flex-col bg-[#1a1a2e]">
       <SkipLink />
@@ -43,42 +52,42 @@ export default function LandingPage() {
           </div>
 
           <nav className="hidden md:flex gap-6" role="navigation" aria-label="Navegación principal">
-            <Link
-              href="#en-vivo"
+            <button
+              onClick={() => scrollToSection("en-vivo")}
               className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a]"
             >
               EN VIVO
-            </Link>
-            <Link
-              href="#programa"
+            </button>
+            <button
+              onClick={() => scrollToSection("programa")}
               className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a]"
             >
               PROGRAMA
-            </Link>
-            <Link
-              href="#twitter"
+            </button>
+            <button
+              onClick={() => scrollToSection("twitter")}
               className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a]"
             >
               NOTICIAS
-            </Link>
-            <Link
-              href="#videos"
+            </button>
+            <button
+              onClick={() => scrollToSection("videos")}
               className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a]"
             >
               VIDEOS
-            </Link>
-            <Link
-              href="#contacto"
+            </button>
+            <button
+              onClick={() => scrollToSection("contacto")}
               className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a]"
             >
               CONTACTO
-            </Link>
+            </button>
           </nav>
 
           <div className="hidden md:flex gap-4">
             <Button
               className="bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
-              onClick={() => document.getElementById("en-vivo")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => scrollToSection("en-vivo")}
             >
               ESCÚCHANOS EN VIVO
             </Button>
@@ -109,7 +118,7 @@ export default function LandingPage() {
                   <Button
                     size="lg"
                     className="h-12 bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
-                    onClick={() => document.getElementById("en-vivo")?.scrollIntoView({ behavior: "smooth" })}
+                    onClick={() => scrollToSection("en-vivo")}
                   >
                     VER EN VIVO
                   </Button>
@@ -117,7 +126,7 @@ export default function LandingPage() {
                     size="lg"
                     variant="outline"
                     className="h-12 text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
-                    onClick={() => document.getElementById("programa")?.scrollIntoView({ behavior: "smooth" })}
+                    onClick={() => scrollToSection("programa")}
                   >
                     PROGRAMACIÓN
                   </Button>
