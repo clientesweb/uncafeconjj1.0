@@ -1,0 +1,37 @@
+{
+  "name": "Un Café con JJ",
+  "short_name": "Un Café JJ",
+  "description": "Programa de análisis político y actualidad con Jimmy Jairala",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#e9b11a",
+  "icons": [
+    {
+      "src": "/images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait",
+  "lang": "es-EC",
+  "dir": "ltr",
+  "categories": ["news", "politics"],
+  "shortcuts": [
+    {
+      "name": "Ver en vivo",
+      "short_name": "En Vivo",
+      "description": "Ver la transmisión en vivo",
+      "url": "/#en-vivo",
+      "icons": [{ "src": "/images/logo.png", "sizes": "192x192" }]
+    }
+  ]
+}
+
