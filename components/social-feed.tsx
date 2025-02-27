@@ -26,29 +26,35 @@ export function SocialFeed() {
   const twitterRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Configurar Twitter Timeline
-    const timeline = document.createElement("a")
-    timeline.className = "twitter-timeline"
-    timeline.setAttribute("data-theme", "dark")
-    timeline.setAttribute("data-chrome", "noheader nofooter noscrollbar transparent")
-    timeline.setAttribute("data-height", "10")
-    timeline.setAttribute("data-tweet-limit", "5")
-    timeline.setAttribute("data-link-color", "#e9b11a")
-    timeline.setAttribute("data-border-color", "#e9b11a20")
-    timeline.setAttribute("href", "https://twitter.com/UnCafeConJJ")
-
-    if (twitterRef.current) {
+    const loadTwitter = () => {
+      if (!twitterRef.current) return
       twitterRef.current.innerHTML = ""
+
+      const timeline = document.createElement("a")
+      timeline.className = "twitter-timeline"
+      timeline.setAttribute("data-theme", "dark")
+      timeline.setAttribute("data-tweet-limit", "5")
+      timeline.setAttribute("data-link-color", "#e9b11a")
+      timeline.setAttribute("data-border-color", "#e9b11a20")
+      timeline.setAttribute("href", "https://twitter.com/UnCafeConJJ")
+
       twitterRef.current.appendChild(timeline)
+
+      if (!document.querySelector('script[src="https://platform.twitter.com/widgets.js"]')) {
+        const script = document.createElement("script")
+        script.src = "https://platform.twitter.com/widgets.js"
+        script.async = true
+        document.body.appendChild(script)
+      }
     }
 
-    const script = document.createElement("script")
-    script.src = "https://platform.twitter.com/widgets.js"
-    script.async = true
-    document.body.appendChild(script)
+    loadTwitter()
 
     return () => {
-      document.body.removeChild(script)
+      const script = document.querySelector('script[src="https://platform.twitter.com/widgets.js"]')
+      if (script) {
+        document.body.removeChild(script)
+      }
     }
   }, [])
 
@@ -90,6 +96,7 @@ export function SocialFeed() {
                     className="object-cover"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     priority={index === 0}
+                    loading={index === 0 ? "eager" : "lazy"}
                   />
                 </div>
               </Card>
@@ -100,4 +107,3 @@ export function SocialFeed() {
     </>
   )
 }
-
