@@ -1,7 +1,8 @@
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { Menu } from "lucide-react"
+import { Menu, Download } from "lucide-react"
 import Link from "next/link"
+import { usePWAInstall } from "@/hooks/use-pwa-install"
 
 const navigation = [
   { name: "EN VIVO", href: "#en-vivo" },
@@ -12,6 +13,8 @@ const navigation = [
 ]
 
 export function MobileMenu() {
+  const { isInstallable, install } = usePWAInstall()
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -32,6 +35,17 @@ export function MobileMenu() {
             </Link>
           ))}
           <Button className="mt-4 bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80">ESCÚCHANOS EN VIVO</Button>
+
+          {isInstallable && (
+            <Button
+              onClick={install}
+              variant="outline"
+              className="mt-2 text-white border-[#e9b11a] hover:bg-[#e9b11a]/10"
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Instalar App
+            </Button>
+          )}
         </nav>
       </SheetContent>
     </Sheet>
