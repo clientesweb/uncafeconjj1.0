@@ -11,7 +11,6 @@ import { MobileMenu } from "./components/mobile-menu"
 import { WhatsAppButton } from "./components/whatsapp-button"
 import { StructuredData } from "./components/structured-data"
 import { TopBanner } from "./components/top-banner"
-import { InstallButton } from "./components/install-button"
 import { TwitterTimeline } from "./components/twitter-timeline"
 import { InstagramPosts } from "./components/instagram-posts"
 import { SkipLink } from "./components/skip-link"
@@ -92,7 +91,6 @@ export default function LandingPage() {
             >
               ESCÚCHANOS EN VIVO
             </Button>
-            <InstallButton />
           </div>
         </div>
       </header>
@@ -173,10 +171,10 @@ export default function LandingPage() {
               <div className="flex items-center justify-center">
                 <Image
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg"
-                  width={600}
-                  height={400}
+                  width={1920}
+                  height={1080}
                   alt="Jimmy Jairala presentando Un Café con JJ"
-                  className="rounded-lg object-cover w-full h-auto"
+                  className="rounded-lg object-cover w-full h-auto aspect-[16/9]"
                   priority
                 />
               </div>
