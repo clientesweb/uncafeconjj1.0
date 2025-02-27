@@ -13,8 +13,8 @@ export function InstagramPosts() {
           </div>
         </div>
         <div className="mx-auto mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[1100px] place-items-center">
-          <InstagramEmbed postUrl="https://www.instagram.com/p/DGigXykR13T/" />
-          <InstagramEmbed postUrl="https://www.instagram.com/p/DGiY18vxPB7/" />
+          <InstagramEmbed postId="DGigXykR13T" />
+          <InstagramEmbed postId="DGiY18vxPB7" />
         </div>
       </div>
     </section>
