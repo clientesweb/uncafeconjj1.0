@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { ExternalLink } from "lucide-react"
@@ -12,30 +12,33 @@ interface LiveStreamPlayerProps {
 export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
+  const iframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
-      // Check if the iframe is accessible
-      const iframe = document.querySelector("iframe") as HTMLIFrameElement
-      if (iframe) {
-        try {
-          // Attempt to access the iframe content
-          const iframeContent = iframe.contentWindow
-          if (!iframeContent) {
-            setHasError(true)
-          }
-        } catch (error) {
-          console.error("Error accessing iframe content:", error)
-          setHasError(true)
-        }
-      } else {
-        setHasError(true)
-      }
+      checkIframeAccess()
     }, 2000)
 
     return () => clearTimeout(timer)
   }, [])
+
+  const checkIframeAccess = () => {
+    if (iframeRef.current) {
+      try {
+        // Attempt to access the iframe content
+        const iframeContent = iframeRef.current.contentWindow
+        if (!iframeContent) {
+          setHasError(true)
+        }
+      } catch (error) {
+        console.error("Error accessing iframe content:", error)
+        setHasError(true)
+      }
+    } else {
+      setHasError(true)
+    }
+  }
 
   if (hasError) {
     return (
@@ -67,29 +70,28 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
     )
   }
 
-  if (isLoading) {
-    return (
-      <div
-        className="rounded-lg overflow-hidden border border-[#e9b11a]/20 bg-[#1a1a2e]"
-        style={{ aspectRatio: "16/9", minHeight: "340px" }}
-      >
-        <Skeleton className="w-full h-full bg-[#e9b11a]/10" />
-      </div>
-    )
-  }
-
   return (
     <div className="rounded-lg overflow-hidden border border-[#e9b11a]/20">
+      {isLoading && (
+        <div style={{ aspectRatio: "16/9", minHeight: "340px" }}>
+          <Skeleton className="w-full h-full bg-[#e9b11a]/10" />
+        </div>
+      )}
       <iframe
+        ref={iframeRef}
         src={streamUrl}
         width="100%"
-        style={{ aspectRatio: "16/9", minHeight: "340px" }}
+        style={{ aspectRatio: "16/9", minHeight: "340px", display: isLoading ? "none" : "block" }}
         frameBorder="0"
         scrolling="no"
         allow="autoplay; fullscreen"
         allowFullScreen
         title="Transmisión en vivo de Un Café con JJ"
         aria-label="Reproductor de video en vivo"
+        onLoad={() => {
+          setIsLoading(false)
+          checkIframeAccess()
+        }}
       ></iframe>
     </div>
   )
