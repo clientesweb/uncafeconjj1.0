@@ -68,62 +68,95 @@ body {
 /* Instagram Embed styles */
 .instagram-media-wrapper {
   width: 100% !important;
-  max-width: 540px !important;
+  max-width: 400px !important;
   margin: 0 auto !important;
-  min-height: 600px;
+  min-height: 400px;
   position: relative;
+}
+
+.instagram-media-wrapper.reel-container {
+  max-width: 340px !important;
+  min-height: 500px;
 }
 
 .instagram-media {
   max-width: none !important;
   min-width: auto !important;
   width: 100% !important;
+  margin: 0 !important;
+  background-color: transparent !important;
 }
 
 iframe.instagram-media {
-  min-height: 600px !important;
+  min-height: 400px !important;
 }
 
 /* Twitter Timeline styles */
 .twitter-timeline-wrapper {
   width: 100% !important;
-  max-width: 540px !important;
+  max-width: 500px !important;
   margin: 0 auto !important;
-  min-height: 600px;
+  min-height: 400px;
   position: relative;
+}
+
+/* Hide Twitter timeline scrollbar */
+.twitter-timeline-wrapper iframe {
+  border: none !important;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .twitter-timeline-wrapper,
-  .instagram-media-wrapper {
-    min-height: 500px;
+  .twitter-timeline-wrapper {
+    min-height: 350px;
   }
 
-  iframe.instagram-media {
-    min-height: 500px !important;
-  }
-}
-
-@media (max-width: 640px) {
-  .twitter-timeline-wrapper,
   .instagram-media-wrapper {
+    min-height: 350px;
+  }
+
+  .instagram-media-wrapper.reel-container {
     min-height: 450px;
   }
 
   iframe.instagram-media {
-    min-height: 450px !important;
+    min-height: 350px !important;
   }
 }
 
-@media (max-width: 480px) {
-  .twitter-timeline-wrapper,
+@media (max-width: 640px) {
+  .twitter-timeline-wrapper {
+    min-height: 300px;
+  }
+
   .instagram-media-wrapper {
+    min-height: 300px;
+  }
+
+  .instagram-media-wrapper.reel-container {
     min-height: 400px;
   }
 
   iframe.instagram-media {
-    min-height: 400px !important;
+    min-height: 300px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .twitter-timeline-wrapper {
+    min-height: 250px;
+  }
+
+  .instagram-media-wrapper {
+    min-height: 250px;
+  }
+
+  .instagram-media-wrapper.reel-container {
+    min-height: 350px;
+  }
+
+  iframe.instagram-media {
+    min-height: 250px !important;
   }
 }
 
