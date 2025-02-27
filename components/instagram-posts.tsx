@@ -14,8 +14,8 @@ export function InstagramPosts() {
         </div>
         <div className="mx-auto max-w-5xl mt-8">
           <div className="grid gap-8 md:grid-cols-2">
-            <InstagramEmbed postUrl="https://www.instagram.com/p/LATEST_POST_ID/" />
-            <InstagramEmbed postUrl="https://www.instagram.com/p/SECOND_POST_ID/" />
+            <InstagramEmbed postUrl="https://www.instagram.com/p/DGigXykR13T/" />
+            <InstagramEmbed postUrl="https://www.instagram.com/p/DGiY18vxPB7/" />
           </div>
         </div>
       </div>
