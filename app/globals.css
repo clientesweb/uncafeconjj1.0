@@ -65,3 +65,20 @@ body {
   color: hsl(var(--primary));
 }
 
+/* Add these styles at the end of your globals.css file */
+.instagram-media-wrapper {
+  width: 100% !important;
+  max-width: 540px !important;
+  margin: 0 auto !important;
+}
+
+.instagram-media {
+  max-width: none !important;
+  min-width: auto !important;
+  width: 100% !important;
+}
+
+iframe.instagram-media {
+  min-height: 675px !important;
+}
+
