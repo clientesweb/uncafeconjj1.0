@@ -1,37 +1,47 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { Card } from "@/components/ui/card"
 
 export function TwitterTimeline() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Crear el elemento del timeline
+    const timeline = document.createElement("a")
+    timeline.className = "twitter-timeline"
+    timeline.setAttribute("data-theme", "dark")
+    timeline.setAttribute("data-tweet-limit", "5")
+    timeline.setAttribute("href", "https://twitter.com/UnCafeConJJ")
+
+    // Limpiar el contenedor y agregar el nuevo timeline
+    if (containerRef.current) {
+      containerRef.current.innerHTML = ""
+      containerRef.current.appendChild(timeline)
+    }
+
+    // Cargar el script de Twitter
     const script = document.createElement("script")
     script.src = "https://platform.twitter.com/widgets.js"
     script.async = true
     document.body.appendChild(script)
 
     return () => {
-      document.body.removeChild(script)
+      if (script.parentNode) {
+        script.parentNode.removeChild(script)
+      }
     }
   }, [])
 
   return (
-    <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20">
-      <div ref={containerRef} className="twitter-timeline-wrapper">
-        <a
-          className="twitter-timeline"
-          data-theme="dark"
-          data-chrome="noheader nofooter transparent"
-          data-tweet-limit="5"
-          data-height="500"
-          href="https://twitter.com/UnCafeConJJ"
-        >
-          Tweets by UnCafeConJJ
-        </a>
-      </div>
-    </Card>
+    <div
+      ref={containerRef}
+      style={{
+        width: "100%",
+        maxWidth: "550px",
+        margin: "0 auto",
+        minHeight: "600px",
+      }}
+    />
   )
 }
 
