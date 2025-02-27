@@ -43,9 +43,9 @@ export const metadata: Metadata = {
     siteName: "Un Café con JJ",
     images: [
       {
-        url: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg",
-        width: 2048,
-        height: 819,
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
         alt: "Un Café con JJ - Jimmy Jairala",
       },
     ],
@@ -55,9 +55,7 @@ export const metadata: Metadata = {
     title: "Un Café con JJ - ALTAVOZ",
     description: "Programa de análisis político y actualidad con Jimmy Jairala",
     creator: "@jimmyjairala",
-    images: [
-      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg",
-    ],
+    images: ["/twitter-image.jpg"],
   },
   robots: {
     index: true,
