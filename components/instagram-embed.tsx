@@ -53,7 +53,7 @@ export function InstagramEmbed({ postId }: InstagramEmbedProps) {
         }}
       />
       <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20">
-        <div className="relative aspect-square">
+        <div className="relative aspect-[4/5] w-full">
           {/* Skeleton loader */}
           <div className="absolute inset-0 flex flex-col gap-4 p-4 animate-pulse">
             <Skeleton className="h-12 w-full bg-[#e9b11a]/10" />
