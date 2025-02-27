@@ -1,22 +1,35 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { Card } from "@/components/ui/card"
 
 export function TwitterTimeline() {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const script = document.createElement("script")
+    script.src = "https://platform.twitter.com/widgets.js"
+    script.async = true
+    document.body.appendChild(script)
+
+    return () => {
+      document.body.removeChild(script)
+    }
+  }, [])
+
   return (
     <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20">
-      <div className="relative">
+      <div ref={containerRef} className="twitter-timeline-wrapper" style={{ minHeight: "600px" }}>
         <a
           className="twitter-timeline"
           data-theme="dark"
           data-chrome="noheader nofooter transparent"
-          data-height="800"
+          data-height="600"
           data-dnt="true"
           href="https://twitter.com/UnCafeConJJ"
         >
           Tweets by UnCafeConJJ
         </a>
-        <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8"></script>
       </div>
     </Card>
   )
