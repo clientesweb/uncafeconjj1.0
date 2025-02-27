@@ -1,18 +1,23 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { fetchPlaylistVideos, type YouTubeVideo } from "@/lib/youtube-service"
 import { YouTubeVideoCard } from "./youtube-video-card"
 import { motion } from "framer-motion"
 import { Skeleton } from "@/components/ui/skeleton"
 
+interface YouTubeVideo {
+  id: string
+  title: string
+  thumbnail: string
+  publishedAt: string
+}
+
 interface YouTubeVideosSectionProps {
   regularPlaylistId: string
   shortsPlaylistId: string
-  apiKey: string
 }
 
-export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId, apiKey }: YouTubeVideosSectionProps) {
+export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId }: YouTubeVideosSectionProps) {
   const [regularVideos, setRegularVideos] = useState<YouTubeVideo[]>([])
   const [shortsVideos, setShortsVideos] = useState<YouTubeVideo[]>([])
   const [loading, setLoading] = useState(true)
@@ -23,36 +28,30 @@ export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId, apiK
       try {
         setLoading(true)
         setError(null)
-        console.log("Fetching videos with:", {
-          regularPlaylistId,
-          shortsPlaylistId,
-          apiKey: apiKey ? "API Key set" : "API Key missing",
-        })
 
-        const regularVideos = await fetchPlaylistVideos(regularPlaylistId, apiKey)
-        console.log("Regular videos fetched:", regularVideos)
+        const [regularResponse, shortsResponse] = await Promise.all([
+          fetch(`/api/youtube-videos?playlistId=${regularPlaylistId}`),
+          fetch(`/api/youtube-videos?playlistId=${shortsPlaylistId}`),
+        ])
 
-        const shortsVideos = await fetchPlaylistVideos(shortsPlaylistId, apiKey)
-        console.log("Shorts videos fetched:", shortsVideos)
-
-        if (regularVideos.length === 0 && shortsVideos.length === 0) {
-          setError(
-            `No se pudieron cargar los videos. Por favor, verifica los IDs de las playlists y la clave de API. Regular Playlist ID: ${regularPlaylistId}, Shorts Playlist ID: ${shortsPlaylistId}, API Key: ${apiKey ? "Set" : "Missing"}`,
-          )
-        } else {
-          setRegularVideos(regularVideos)
-          setShortsVideos(shortsVideos)
+        if (!regularResponse.ok || !shortsResponse.ok) {
+          throw new Error("Error fetching videos")
         }
+
+        const [regularData, shortsData] = await Promise.all([regularResponse.json(), shortsResponse.json()])
+
+        setRegularVideos(regularData)
+        setShortsVideos(shortsData)
       } catch (err) {
         console.error("Error loading videos:", err)
-        setError(`Ocurrió un error al cargar los videos: ${err instanceof Error ? err.message : String(err)}`)
+        setError("Ocurrió un error al cargar los videos. Por favor, intenta más tarde.")
       } finally {
         setLoading(false)
       }
     }
 
     loadVideos()
-  }, [regularPlaylistId, shortsPlaylistId, apiKey])
+  }, [regularPlaylistId, shortsPlaylistId])
 
   return (
     <section id="videos" className="w-full py-12 md:py-24 lg:py-32 bg-[#111122]">
