@@ -41,6 +41,7 @@ export default function LandingPage() {
                 alt="Un Café con JJ Logo"
                 className="h-10 w-10 rounded-full"
                 priority
+                quality={90}
               />
               <span className="text-xl font-bold text-white">Un Café con JJ</span>
             </Link>
@@ -90,10 +91,14 @@ export default function LandingPage() {
           <div className="relative w-full h-[calc(100vh-4rem)] min-h-[600px]">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg"
-              layout="fill"
-              objectFit="cover"
               alt="Jimmy Jairala presentando Un Café con JJ"
               priority
+              quality={85}
+              fill
+              sizes="100vw"
+              style={{ objectFit: "cover" }}
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQrJyEwPDY2ODYyTEhMR0BGRlNCRkJHYGFjYWM4OTtBV0VGUElGYWZYZFD/2wBDARUXFyAeIBogHh4gIiAyRzJHMkZGR0dGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkb/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
             />
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center">
               <div className="container px-4 md:px-6">
@@ -341,11 +346,19 @@ export default function LandingPage() {
                 height={40}
                 alt="Un Café con JJ Logo"
                 className="h-10 w-10 rounded-full"
+                quality={90}
               />
               <span className="text-lg font-bold text-white">Un Café con JJ</span>
             </div>
             <div className="flex items-center gap-4">
-              <Image src="/images/altavoz.png" width={120} height={40} alt="ALTAVOZ Logo" className="h-10" />
+              <Image
+                src="/images/altavoz.png"
+                width={120}
+                height={40}
+                alt="ALTAVOZ Logo"
+                className="h-10"
+                quality={90}
+              />
               <div className="flex flex-col">
                 <span className="text-sm font-bold text-[#e9b11a]">Kocodrilo Radio 94.5 FM</span>
                 <span className="text-sm font-bold text-[#e9b11a]">Café Radio 91.7 MHz</span>
