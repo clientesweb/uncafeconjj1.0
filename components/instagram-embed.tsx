@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { Card } from "@/components/ui/card"
 
 interface InstagramEmbedProps {
@@ -7,9 +8,22 @@ interface InstagramEmbedProps {
 }
 
 export function InstagramEmbed({ postUrl }: InstagramEmbedProps) {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const script = document.createElement("script")
+    script.src = "https://www.instagram.com/embed.js"
+    script.async = true
+    document.body.appendChild(script)
+
+    return () => {
+      document.body.removeChild(script)
+    }
+  }, [])
+
   return (
     <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20">
-      <div className="instagram-media-wrapper" style={{ maxWidth: "540px", margin: "0 auto" }}>
+      <div ref={containerRef} className="instagram-media-wrapper" style={{ minHeight: "600px" }}>
         <blockquote
           className="instagram-media"
           data-instgrm-permalink={postUrl}
@@ -38,7 +52,6 @@ export function InstagramEmbed({ postUrl }: InstagramEmbedProps) {
             </a>
           </div>
         </blockquote>
-        <script async src="//www.instagram.com/embed.js"></script>
       </div>
     </Card>
   )
