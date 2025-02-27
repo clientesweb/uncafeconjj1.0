@@ -15,6 +15,18 @@ const nextConfig = {
         protocol: "https",
         hostname: "**.youtube.com",
       },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+      },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+      },
     ],
   },
   compress: true, // Habilitar compresión Gzip
