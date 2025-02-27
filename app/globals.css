@@ -65,11 +65,20 @@ body {
   color: hsl(var(--primary));
 }
 
-/* Add these styles at the end of your globals.css file */
+/* Twitter Timeline styles */
+.twitter-timeline-wrapper {
+  width: 100% !important;
+  max-width: 540px !important;
+  margin: 0 auto !important;
+  min-height: 600px;
+}
+
+/* Instagram Embed styles */
 .instagram-media-wrapper {
   width: 100% !important;
   max-width: 540px !important;
   margin: 0 auto !important;
+  min-height: 600px;
 }
 
 .instagram-media {
@@ -79,6 +88,18 @@ body {
 }
 
 iframe.instagram-media {
-  min-height: 675px !important;
+  min-height: 600px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .twitter-timeline-wrapper,
+  .instagram-media-wrapper {
+    min-height: 500px;
+  }
+
+  iframe.instagram-media {
+    min-height: 500px !important;
+  }
 }
 
