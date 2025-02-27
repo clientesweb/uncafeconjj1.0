@@ -7,6 +7,7 @@
 
 [build.environment]
   NODE_VERSION = "18.17.0"
+  NEXT_PUBLIC_SITE_URL = "https://uncafeconjj.com"
 
 [[headers]]
   for = "/*"
@@ -21,7 +22,4 @@
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  NEXT_PUBLIC_SITE_URL = "https://uncafeconjj.com"
 
