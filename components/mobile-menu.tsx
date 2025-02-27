@@ -7,7 +7,6 @@ import { usePWAInstall } from "@/hooks/use-pwa-install"
 const navigation = [
   { name: "EN VIVO", href: "#en-vivo" },
   { name: "PROGRAMA", href: "#programa" },
-  { name: "NOTICIAS", href: "#twitter" },
   { name: "VIDEOS", href: "#videos" },
   { name: "CONTACTO", href: "#contacto" },
 ]
