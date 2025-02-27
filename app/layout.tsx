@@ -1,8 +1,10 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { inter } from "./fonts"
+import { Inter } from "next/font/google"
 import "./globals.css"
 import { ServiceWorkerRegister } from "./sw-register"
+
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://uncafeconjj.com"),
@@ -95,7 +97,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es" className={`scroll-smooth ${inter.variable}`}>
+    <html lang="es" className="scroll-smooth">
       <head>
         {/* Performance optimizations */}
         <link rel="preconnect" href="https://www.youtube.com" crossOrigin="anonymous" />
