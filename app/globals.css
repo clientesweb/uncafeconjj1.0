@@ -34,29 +34,15 @@ body {
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* Instagram Embed styles */
-.instagram-media-wrapper {
-  width: 100% !important;
-  margin: 0 !important;
-}
-
+/* Estilos básicos para los embeds */
 .instagram-media {
-  max-width: 540px !important;
-  width: 100% !important;
-  min-width: 326px !important;
-  margin: 0 auto !important;
   background: #1a1a2e !important;
   border: 1px solid rgba(233, 177, 26, 0.2) !important;
   border-radius: 8px !important;
-}
-
-/* Twitter Timeline styles */
-.twitter-timeline-wrapper {
   width: 100% !important;
   max-width: 540px !important;
+  min-width: 326px !important;
   margin: 0 auto !important;
-  height: 500px !important;
-  overflow: hidden !important;
 }
 
 .twitter-timeline {
