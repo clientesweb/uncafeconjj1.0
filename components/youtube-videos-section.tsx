@@ -28,18 +28,20 @@ export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId, apiK
           shortsPlaylistId,
           apiKey: apiKey ? "API Key set" : "API Key missing",
         })
-        const [regular, shorts] = await Promise.all([
-          fetchPlaylistVideos(regularPlaylistId, apiKey),
-          fetchPlaylistVideos(shortsPlaylistId, apiKey),
-        ])
-        console.log("Fetched videos:", { regular: regular.length, shorts: shorts.length })
-        if (regular.length === 0 && shorts.length === 0) {
+
+        const regularVideos = await fetchPlaylistVideos(regularPlaylistId, apiKey)
+        console.log("Regular videos fetched:", regularVideos)
+
+        const shortsVideos = await fetchPlaylistVideos(shortsPlaylistId, apiKey)
+        console.log("Shorts videos fetched:", shortsVideos)
+
+        if (regularVideos.length === 0 && shortsVideos.length === 0) {
           setError(
             `No se pudieron cargar los videos. Por favor, verifica los IDs de las playlists y la clave de API. Regular Playlist ID: ${regularPlaylistId}, Shorts Playlist ID: ${shortsPlaylistId}, API Key: ${apiKey ? "Set" : "Missing"}`,
           )
         } else {
-          setRegularVideos(regular)
-          setShortsVideos(shorts)
+          setRegularVideos(regularVideos)
+          setShortsVideos(shortsVideos)
         }
       } catch (err) {
         console.error("Error loading videos:", err)
