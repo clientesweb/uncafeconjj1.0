@@ -5,6 +5,9 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+[build.environment]
+  NODE_VERSION = "18.17.0"
+
 [[headers]]
   for = "/*"
   [headers.values]
