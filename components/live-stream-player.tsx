@@ -25,8 +25,8 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
   if (hasError) {
     return (
       <div
-        className="rounded-lg overflow-hidden border border-[#e9b11a]/20 bg-[#1a1a2e] flex flex-col items-center justify-center p-8"
-        style={{ aspectRatio: "16/9", minHeight: "340px" }}
+        className="rounded-lg overflow-hidden border border-[#e9b11a]/20 bg-[#1a1a2e] flex flex-col items-center justify-center p-4 sm:p-8 w-full mx-auto"
+        style={{ aspectRatio: "16/9", minHeight: "250px" }}
       >
         <h3 className="text-xl font-bold text-white mb-4">Transmisión no disponible</h3>
         <p className="text-gray-400 text-center mb-6">
@@ -55,8 +55,8 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
   if (isLoading) {
     return (
       <div
-        className="rounded-lg overflow-hidden border border-[#e9b11a]/20 bg-[#1a1a2e]"
-        style={{ aspectRatio: "16/9", minHeight: "340px" }}
+        className="rounded-lg overflow-hidden border border-[#e9b11a]/20 bg-[#1a1a2e] w-full mx-auto"
+        style={{ aspectRatio: "16/9", minHeight: "250px" }}
       >
         <Skeleton className="w-full h-full bg-[#e9b11a]/10" />
       </div>
@@ -64,18 +64,19 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
   }
 
   return (
-    <div className="rounded-lg overflow-hidden border border-[#e9b11a]/20">
-      <iframe
-        src={streamUrl}
-        width="100%"
-        style={{ aspectRatio: "16/9", minHeight: "340px" }}
-        frameBorder="0"
-        scrolling="no"
-        allow="autoplay"
-        allowFullScreen
-        title="Transmisión en vivo de Un Café con JJ"
-        aria-label="Reproductor de video en vivo"
-      ></iframe>
+    <div className="rounded-lg overflow-hidden border border-[#e9b11a]/20 w-full mx-auto relative">
+      <div className="w-full" style={{ aspectRatio: "16/9" }}>
+        <iframe
+          src={streamUrl}
+          className="absolute top-0 left-0 w-full h-full"
+          frameBorder="0"
+          scrolling="no"
+          allow="autoplay"
+          allowFullScreen
+          title="Transmisión en vivo de Un Café con JJ"
+          aria-label="Reproductor de video en vivo"
+        ></iframe>
+      </div>
     </div>
   )
 }
