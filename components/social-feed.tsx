@@ -31,7 +31,7 @@ export function SocialFeed() {
     timeline.className = "twitter-timeline"
     timeline.setAttribute("data-theme", "dark")
     timeline.setAttribute("data-chrome", "noheader nofooter noscrollbar transparent")
-    timeline.setAttribute("data-height", "500")
+    timeline.setAttribute("data-height", "10")
     timeline.setAttribute("data-tweet-limit", "5")
     timeline.setAttribute("data-link-color", "#e9b11a")
     timeline.setAttribute("data-border-color", "#e9b11a20")
