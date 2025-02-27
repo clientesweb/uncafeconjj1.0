@@ -9,6 +9,11 @@
   NODE_VERSION = "18.17.0"
   NEXT_PUBLIC_SITE_URL = "https://uncafeconjj.com"
 
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -17,9 +22,4 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Content-Security-Policy = "default-src 'self' 'unsafe-inline' 'unsafe-eval' *.youtube.com *.twitter.com *.instagram.com *.facebook.com *.google-analytics.com; img-src 'self' data: blob: *.vercel-storage.com *.ytimg.com *.twitter.com *.instagram.com *.facebook.com; media-src 'self' *.youtube.com; frame-src 'self' *.youtube.com *.twitter.com *.instagram.com *.facebook.com"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
 
