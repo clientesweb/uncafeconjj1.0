@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "rm -rf node_modules .next",
+    "reinstall": "npm run clean && npm install",
+    "check": "npm ls --depth=0"
   },
   "dependencies": {
     "@radix-ui/react-alert-dialog": "1.0.5",
@@ -36,6 +39,9 @@
     "prettier-plugin-tailwindcss": "0.5.11",
     "tailwindcss": "3.4.1",
     "typescript": "5.3.3"
+  },
+  "engines": {
+    "node": ">=18.17.0"
   }
 }
 
