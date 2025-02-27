@@ -198,9 +198,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="mx-auto max-w-5xl mt-8">
-              <div className="rounded-lg overflow-hidden border border-[#e9b11a]/20">
-                <LiveStreamPlayer streamUrl="https://player.castr.com/live_STREAM_URL" />
-              </div>
+              <LiveStreamPlayer streamUrl="https://player.castr.com/d_8aea6c10d99811efb5ebf7655896c5a7" />
             </div>
           </div>
         </section>
