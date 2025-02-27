@@ -11,60 +11,50 @@ export function TwitterTimeline() {
   const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
-    let isMounted = true
-
-    const loadTwitterWidget = async () => {
+    const loadTwitterWidget = () => {
       try {
-        // Remove any existing Twitter widgets
-        if (document.querySelector(".twitter-timeline")) {
-          document.querySelector(".twitter-timeline")?.remove()
+        // Limpiar cualquier timeline existente
+        if (containerRef.current) {
+          containerRef.current.innerHTML = ""
         }
 
-        // Create new Twitter Timeline element
+        // Crear nuevo elemento de timeline
         const timeline = document.createElement("a")
         timeline.className = "twitter-timeline"
         timeline.setAttribute("data-theme", "dark")
         timeline.setAttribute("data-chrome", "noheader nofooter transparent")
+        timeline.setAttribute("data-height", "600")
         timeline.setAttribute("data-tweet-limit", "5")
-        timeline.setAttribute("data-dnt", "true")
         timeline.setAttribute("href", "https://twitter.com/UnCafeConJJ")
-        timeline.innerText = "Tweets by UnCafeConJJ"
 
-        // Add timeline to container
         if (containerRef.current) {
           containerRef.current.appendChild(timeline)
         }
 
-        // Load Twitter widget script
-        if (!window.twttr) {
+        // Cargar el script de Twitter
+        if (window.twttr) {
+          window.twttr.widgets.load(containerRef.current)
+          setTimeout(() => setIsLoading(false), 1000)
+        } else {
           const script = document.createElement("script")
           script.src = "https://platform.twitter.com/widgets.js"
           script.async = true
           script.onload = () => {
-            if (window.twttr && isMounted) {
+            if (window.twttr) {
               window.twttr.widgets.load(containerRef.current)
-              setTimeout(() => {
-                if (isMounted) setIsLoading(false)
-              }, 1000)
+              setTimeout(() => setIsLoading(false), 1000)
             }
           }
           document.head.appendChild(script)
-        } else {
-          window.twttr.widgets.load(containerRef.current)
-          setTimeout(() => {
-            if (isMounted) setIsLoading(false)
-          }, 1000)
         }
       } catch (error) {
         console.error("Error loading Twitter timeline:", error)
-        if (isMounted) {
-          setHasError(true)
-          setIsLoading(false)
-        }
+        setHasError(true)
+        setIsLoading(false)
       }
     }
 
-    // Use Intersection Observer for lazy loading
+    // Usar Intersection Observer para lazy loading
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -72,17 +62,14 @@ export function TwitterTimeline() {
           observer.disconnect()
         }
       },
-      { threshold: 0.1, rootMargin: "50px" },
+      { threshold: 0.1 },
     )
 
     if (containerRef.current) {
       observer.observe(containerRef.current)
     }
 
-    return () => {
-      isMounted = false
-      observer.disconnect()
-    }
+    return () => observer.disconnect()
   }, [])
 
   if (hasError) {
