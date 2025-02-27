@@ -1,90 +1,18 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { fetchPlaylistVideos, type YouTubeVideo } from "@/lib/youtube-service"
 import { YouTubeVideoCard } from "./youtube-video-card"
 import { motion } from "framer-motion"
 import { Skeleton } from "@/components/ui/skeleton"
 
-interface YouTubeVideo {
-  id: string
-  title: string
-  thumbnail: string
-  publishedAt: string
-}
-
 interface YouTubeVideosSectionProps {
   regularPlaylistId: string
   shortsPlaylistId: string
+  apiKey: string
 }
 
-// Mock data for videos in case the API fails
-const mockRegularVideos: YouTubeVideo[] = [
-  {
-    id: "Ks-_Mh1QhMc",
-    title: "Un Café con JJ - Análisis de la situación política actual",
-    thumbnail: "https://i.ytimg.com/vi/Ks-_Mh1QhMc/hqdefault.jpg",
-    publishedAt: new Date().toISOString(),
-  },
-  {
-    id: "C0DPdy98e4c",
-    title: "Entrevista exclusiva con el Ministro de Economía",
-    thumbnail: "https://i.ytimg.com/vi/C0DPdy98e4c/hqdefault.jpg",
-    publishedAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-  },
-  {
-    id: "7wtfhZwyrcc",
-    title: "Debate sobre la reforma tributaria - Un Café con JJ",
-    thumbnail: "https://i.ytimg.com/vi/7wtfhZwyrcc/hqdefault.jpg",
-    publishedAt: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-  },
-  {
-    id: "4q1dgn_C0AU",
-    title: "Las elecciones 2025: Análisis de candidatos",
-    thumbnail: "https://i.ytimg.com/vi/4q1dgn_C0AU/hqdefault.jpg",
-    publishedAt: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
-  },
-  {
-    id: "xUEB-pF4oVY",
-    title: "Crisis económica: Perspectivas para Ecuador",
-    thumbnail: "https://i.ytimg.com/vi/xUEB-pF4oVY/hqdefault.jpg",
-    publishedAt: new Date(Date.now() - 345600000).toISOString(), // 4 days ago
-  },
-]
-
-const mockShortsVideos: YouTubeVideo[] = [
-  {
-    id: "QH2-TGUlwu4",
-    title: "Jimmy Jairala responde a críticas sobre su postura política",
-    thumbnail: "https://i.ytimg.com/vi/QH2-TGUlwu4/hqdefault.jpg",
-    publishedAt: new Date().toISOString(),
-  },
-  {
-    id: "4q1dgn_C0AU",
-    title: "Momento destacado: Debate sobre seguridad",
-    thumbnail: "https://i.ytimg.com/vi/4q1dgn_C0AU/hqdefault.jpg",
-    publishedAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-  },
-  {
-    id: "7wtfhZwyrcc",
-    title: "Análisis rápido: Inflación en Ecuador",
-    thumbnail: "https://i.ytimg.com/vi/7wtfhZwyrcc/hqdefault.jpg",
-    publishedAt: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
-  },
-  {
-    id: "C0DPdy98e4c",
-    title: "Resumen: Entrevista con líder indígena",
-    thumbnail: "https://i.ytimg.com/vi/C0DPdy98e4c/hqdefault.jpg",
-    publishedAt: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
-  },
-  {
-    id: "Ks-_Mh1QhMc",
-    title: "Opinión: Nuevas medidas económicas",
-    thumbnail: "https://i.ytimg.com/vi/Ks-_Mh1QhMc/hqdefault.jpg",
-    publishedAt: new Date(Date.now() - 345600000).toISOString(), // 4 days ago
-  },
-]
-
-export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId }: YouTubeVideosSectionProps) {
+export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId, apiKey }: YouTubeVideosSectionProps) {
   const [regularVideos, setRegularVideos] = useState<YouTubeVideo[]>([])
   const [shortsVideos, setShortsVideos] = useState<YouTubeVideo[]>([])
   const [loading, setLoading] = useState(true)
@@ -95,28 +23,15 @@ export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId }: Yo
       try {
         setLoading(true)
         setError(null)
-
-        // Try to fetch from API first
-        try {
-          const [regularResponse, shortsResponse] = await Promise.all([
-            fetch(`/api/youtube-videos?playlistId=${regularPlaylistId}`),
-            fetch(`/api/youtube-videos?playlistId=${shortsPlaylistId}`),
-          ])
-
-          if (regularResponse.ok && shortsResponse.ok) {
-            const [regularData, shortsData] = await Promise.all([regularResponse.json(), shortsResponse.json()])
-            setRegularVideos(regularData)
-            setShortsVideos(shortsData)
-          } else {
-            // If API fails, use mock data
-            console.log("Using mock data due to API failure")
-            setRegularVideos(mockRegularVideos)
-            setShortsVideos(mockShortsVideos)
-          }
-        } catch (err) {
-          console.error("Error fetching from API, using mock data:", err)
-          setRegularVideos(mockRegularVideos)
-          setShortsVideos(mockShortsVideos)
+        const [regular, shorts] = await Promise.all([
+          fetchPlaylistVideos(regularPlaylistId, apiKey),
+          fetchPlaylistVideos(shortsPlaylistId, apiKey),
+        ])
+        if (regular.length === 0 && shorts.length === 0) {
+          setError("No se pudieron cargar los videos. Por favor, verifica los IDs de las playlists y la clave de API.")
+        } else {
+          setRegularVideos(regular)
+          setShortsVideos(shorts)
         }
       } catch (err) {
         console.error("Error loading videos:", err)
@@ -127,7 +42,7 @@ export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId }: Yo
     }
 
     loadVideos()
-  }, [regularPlaylistId, shortsPlaylistId])
+  }, [regularPlaylistId, shortsPlaylistId, apiKey])
 
   return (
     <section id="videos" className="w-full py-12 md:py-24 lg:py-32 bg-[#111122]">
