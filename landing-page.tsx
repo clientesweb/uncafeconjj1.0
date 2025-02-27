@@ -1,23 +1,32 @@
 "use client"
 
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Facebook, Instagram, Youtube, Twitter, Clock, Calendar, Radio, Mic2 } from "lucide-react"
 import { TikTok } from "./tiktok-icon"
-import { YouTubeVideosSection } from "./components/youtube-videos-section"
 import { MobileMenu } from "./components/mobile-menu"
 import { WhatsAppButton } from "./components/whatsapp-button"
 import { StructuredData } from "./components/structured-data"
 import { TopBanner } from "./components/top-banner"
 import { InstallButton } from "./components/install-button"
-import { TwitterTimeline } from "./components/twitter-timeline"
-import { InstagramPosts } from "./components/instagram-posts"
 import { SkipLink } from "./components/skip-link"
-import { Suspense } from "react"
+import { Suspense, useEffect, useState } from "react"
+
+// Importaciones dinámicas para componentes que requieren carga del lado del cliente
+const DynamicYouTubeVideosSection = dynamic(() => import("./components/youtube-videos-section"), { ssr: false })
+const DynamicTwitterTimeline = dynamic(() => import("./components/twitter-timeline"), { ssr: false })
+const DynamicInstagramPosts = dynamic(() => import("./components/instagram-posts"), { ssr: false })
 
 export default function LandingPage() {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
@@ -198,17 +207,20 @@ export default function LandingPage() {
             </div>
             <div className="mx-auto max-w-5xl mt-8">
               <div className="rounded-lg overflow-hidden border border-[#e9b11a]/20">
-                <iframe
-                  src="https://player.castr.com/live_STREAM_URL"
-                  width="100%"
-                  style={{ aspectRatio: "16/9", minHeight: "340px" }}
-                  frameBorder="0"
-                  scrolling="no"
-                  allow="autoplay"
-                  allowFullScreen
-                  title="Transmisión en vivo de Un Café con JJ"
-                  aria-label="Reproductor de video en vivo"
-                ></iframe>
+                {isClient && (
+                  <iframe
+                    src="https://player.castr.com/live_STREAM_URL"
+                    width="100%"
+                    height="340"
+                    style={{ aspectRatio: "16/9", minHeight: "340px" }}
+                    frameBorder="0"
+                    scrolling="no"
+                    allow="autoplay"
+                    allowFullScreen
+                    title="Transmisión en vivo de Un Café con JJ"
+                    aria-label="Reproductor de video en vivo"
+                  ></iframe>
+                )}
               </div>
             </div>
           </div>
@@ -228,15 +240,13 @@ export default function LandingPage() {
                   </p>
                 </div>
               </div>
-              <div className="mx-auto max-w-3xl mt-8">
-                <TwitterTimeline />
-              </div>
+              <div className="mx-auto max-w-3xl mt-8">{isClient && <DynamicTwitterTimeline />}</div>
             </div>
           </section>
         </Suspense>
 
         <Suspense fallback={<div className="w-full h-[400px] bg-[#1a1a2e] animate-pulse" />}>
-          <InstagramPosts />
+          {isClient && <DynamicInstagramPosts />}
         </Suspense>
 
         {/* Program Info Section */}
@@ -319,11 +329,13 @@ export default function LandingPage() {
 
         {/* YouTube Videos Section */}
         <section id="videos" className="w-full py-12 md:py-24 lg:py-32" aria-labelledby="videos-title">
-          <YouTubeVideosSection
-            regularPlaylistId="PLSwBXxeopk-xySzecvVbfGTqnCTi8QhtE"
-            shortsPlaylistId="PLSwBXxeopk-xUhmNW4jOBi8Olkr_4p2Rc"
-            apiKey="AIzaSyBcNo4pMTbFhTs8RKujYFfNSo_HbIP9f7E"
-          />
+          {isClient && (
+            <DynamicYouTubeVideosSection
+              regularPlaylistId="PLSwBXxeopk-xySzecvVbfGTqnCTi8QhtE"
+              shortsPlaylistId="PLSwBXxeopk-xUhmNW4jOBi8Olkr_4p2Rc"
+              apiKey="AIzaSyBcNo4pMTbFhTs8RKujYFfNSo_HbIP9f7E"
+            />
+          )}
         </section>
 
         {/* CTA Section */}
