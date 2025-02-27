@@ -16,11 +16,26 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
-      setHasError(!streamUrl)
+      // Check if the iframe is accessible
+      const iframe = document.querySelector("iframe") as HTMLIFrameElement
+      if (iframe) {
+        try {
+          // Attempt to access the iframe content
+          const iframeContent = iframe.contentWindow
+          if (!iframeContent) {
+            setHasError(true)
+          }
+        } catch (error) {
+          console.error("Error accessing iframe content:", error)
+          setHasError(true)
+        }
+      } else {
+        setHasError(true)
+      }
     }, 2000)
 
     return () => clearTimeout(timer)
-  }, [streamUrl])
+  }, [])
 
   if (hasError) {
     return (
@@ -30,8 +45,8 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
       >
         <h3 className="text-xl font-bold text-white mb-4">Transmisión no disponible</h3>
         <p className="text-gray-400 text-center mb-6">
-          La transmisión en vivo no está disponible en este momento. Por favor, intenta más tarde o escúchanos en la
-          radio.
+          Lo sentimos, la transmisión en vivo está bloqueada en este momento. Puedes intentar verla directamente en
+          nuestras plataformas de streaming.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <Button
@@ -71,7 +86,7 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
         style={{ aspectRatio: "16/9", minHeight: "340px" }}
         frameBorder="0"
         scrolling="no"
-        allow="autoplay"
+        allow="autoplay; fullscreen"
         allowFullScreen
         title="Transmisión en vivo de Un Café con JJ"
         aria-label="Reproductor de video en vivo"
