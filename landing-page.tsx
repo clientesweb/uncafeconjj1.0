@@ -16,6 +16,7 @@ import { TwitterTimeline } from "./components/twitter-timeline"
 import { InstagramPosts } from "./components/instagram-posts"
 import { SkipLink } from "./components/skip-link"
 import { Suspense } from "react"
+import { LiveStreamPlayer } from "./components/live-stream-player"
 
 export default function LandingPage() {
   const scrollToSection = (id: string) => {
@@ -198,17 +199,7 @@ export default function LandingPage() {
             </div>
             <div className="mx-auto max-w-5xl mt-8">
               <div className="rounded-lg overflow-hidden border border-[#e9b11a]/20">
-                <iframe
-                  src="https://player.castr.com/live_STREAM_URL"
-                  width="100%"
-                  style={{ aspectRatio: "16/9", minHeight: "340px" }}
-                  frameBorder="0"
-                  scrolling="no"
-                  allow="autoplay"
-                  allowFullScreen
-                  title="Transmisión en vivo de Un Café con JJ"
-                  aria-label="Reproductor de video en vivo"
-                ></iframe>
+                <LiveStreamPlayer streamUrl="https://player.castr.com/live_STREAM_URL" />
               </div>
             </div>
           </div>
