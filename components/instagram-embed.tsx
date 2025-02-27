@@ -14,7 +14,6 @@ export function InstagramEmbed({ postId }: InstagramEmbedProps) {
   const [isScriptError, setIsScriptError] = useState(false)
 
   useEffect(() => {
-    // Reinitialize Instagram embeds when component mounts
     if ((window as any).instgrm) {
       try {
         ;(window as any).instgrm.Embeds.process()
@@ -23,7 +22,6 @@ export function InstagramEmbed({ postId }: InstagramEmbedProps) {
       }
     }
 
-    // Set a timeout to show an error message if Instagram doesn't load
     const timeoutId = setTimeout(() => {
       if (!(window as any).instgrm?.Embeds) {
         setIsScriptError(true)
@@ -34,13 +32,12 @@ export function InstagramEmbed({ postId }: InstagramEmbedProps) {
   }, [])
 
   return (
-    <div className="relative min-h-[400px] w-full">
+    <div className="relative w-full">
       <Script
         src="https://www.instagram.com/embed.js"
         strategy="lazyOnload"
         onLoad={() => {
           setIsScriptLoaded(true)
-          // Process embeds after script loads
           try {
             if ((window as any).instgrm?.Embeds) {
               ;(window as any).instgrm.Embeds.process()
@@ -56,11 +53,11 @@ export function InstagramEmbed({ postId }: InstagramEmbedProps) {
         }}
       />
       <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20">
-        <div className="relative">
+        <div className="relative aspect-square">
           {/* Skeleton loader */}
           <div className="absolute inset-0 flex flex-col gap-4 p-4 animate-pulse">
             <Skeleton className="h-12 w-full bg-[#e9b11a]/10" />
-            <Skeleton className="aspect-square w-full bg-[#e9b11a]/10" />
+            <Skeleton className="flex-1 w-full bg-[#e9b11a]/10" />
             <Skeleton className="h-16 w-full bg-[#e9b11a]/10" />
           </div>
 
@@ -83,13 +80,10 @@ export function InstagramEmbed({ postId }: InstagramEmbedProps) {
               borderRadius: "8px",
               boxShadow: "none",
               margin: "0",
-              minWidth: "326px",
               padding: "0",
-              minHeight: "400px",
+              width: "100%",
+              height: "100%",
             }}
-            onClick={() => window.open(`https://www.instagram.com/p/${postId}/`, "_blank")}
-            role="link"
-            aria-label="Ver publicación en Instagram"
           />
         </div>
       </Card>
