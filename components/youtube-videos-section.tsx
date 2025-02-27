@@ -1,10 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { fetchPlaylistVideos, type YouTubeVideo } from "@/lib/youtube-service"
 import { YouTubeVideoCard } from "./youtube-video-card"
 import { motion } from "framer-motion"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Button } from "@/components/ui/button"
+import { RefreshCw } from "lucide-react"
 
 interface YouTubeVideosSectionProps {
   regularPlaylistId: string
@@ -18,31 +20,42 @@ export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId, apiK
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    async function loadVideos() {
-      try {
-        setLoading(true)
-        setError(null)
-        const [regular, shorts] = await Promise.all([
-          fetchPlaylistVideos(regularPlaylistId, apiKey),
-          fetchPlaylistVideos(shortsPlaylistId, apiKey),
-        ])
-        if (regular.length === 0 && shorts.length === 0) {
-          setError("No se pudieron cargar los videos. Por favor, verifica los IDs de las playlists y la clave de API.")
-        } else {
-          setRegularVideos(regular)
-          setShortsVideos(shorts)
-        }
-      } catch (err) {
-        console.error("Error loading videos:", err)
-        setError("Ocurrió un error al cargar los videos. Por favor, intenta más tarde.")
-      } finally {
-        setLoading(false)
-      }
-    }
+  const loadVideos = useCallback(async () => {
+    try {
+      setLoading(true)
+      setError(null)
 
-    loadVideos()
+      console.log("Fetching videos with playlist IDs:", { regularPlaylistId, shortsPlaylistId })
+
+      const [regular, shorts] = await Promise.all([
+        fetchPlaylistVideos(regularPlaylistId, apiKey),
+        fetchPlaylistVideos(shortsPlaylistId, apiKey),
+      ])
+
+      console.log("Fetched videos:", {
+        regularCount: regular.length,
+        shortsCount: shorts.length,
+        regularSample: regular.length > 0 ? regular[0] : null,
+        shortsSample: shorts.length > 0 ? shorts[0] : null,
+      })
+
+      if (regular.length === 0 && shorts.length === 0) {
+        setError("No se pudieron cargar los videos. Por favor, verifica los IDs de las playlists y la clave de API.")
+      } else {
+        setRegularVideos(regular)
+        setShortsVideos(shorts)
+      }
+    } catch (err) {
+      console.error("Error loading videos:", err)
+      setError("Ocurrió un error al cargar los videos. Por favor, intenta más tarde.")
+    } finally {
+      setLoading(false)
+    }
   }, [regularPlaylistId, shortsPlaylistId, apiKey])
+
+  useEffect(() => {
+    loadVideos()
+  }, [loadVideos])
 
   return (
     <section id="videos" className="w-full py-12 md:py-24 lg:py-32 bg-[#111122]">
@@ -62,8 +75,16 @@ export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId, apiK
         </motion.div>
 
         {error ? (
-          <div className="mt-12 text-center">
-            <p className="text-red-400">{error}</p>
+          <div className="mt-12 text-center flex flex-col items-center">
+            <p className="text-red-400 mb-4">{error}</p>
+            <Button
+              onClick={loadVideos}
+              variant="outline"
+              className="text-white border-[#e9b11a] hover:bg-[#e9b11a]/10"
+            >
+              <RefreshCw className="mr-2 h-4 w-4" />
+              Reintentar
+            </Button>
           </div>
         ) : (
           <>
