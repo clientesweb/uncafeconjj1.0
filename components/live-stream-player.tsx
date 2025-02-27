@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { ExternalLink } from "lucide-react"
@@ -12,34 +12,15 @@ interface LiveStreamPlayerProps {
 export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
-  const iframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
-    const checkIframeAccess = () => {
-      if (iframeRef.current) {
-        try {
-          // Attempt to access the iframe content
-          const iframeContent = iframeRef.current.contentWindow
-          if (!iframeContent) {
-            throw new Error("Cannot access iframe content")
-          }
-          setIsLoading(false)
-          setHasError(false)
-        } catch (error) {
-          console.error("Error accessing iframe content:", error)
-          setIsLoading(false)
-          setHasError(true)
-        }
-      } else {
-        setIsLoading(false)
-        setHasError(true)
-      }
-    }
-
-    const timer = setTimeout(checkIframeAccess, 5000) // Increase timeout to 5 seconds
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+      setHasError(!streamUrl)
+    }, 2000)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [streamUrl])
 
   if (hasError) {
     return (
@@ -49,8 +30,8 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
       >
         <h3 className="text-xl font-bold text-white mb-4">Transmisión no disponible</h3>
         <p className="text-gray-400 text-center mb-6">
-          Lo sentimos, la transmisión en vivo está bloqueada en este momento. Puedes intentar verla directamente en
-          nuestras plataformas de streaming.
+          La transmisión en vivo no está disponible en este momento. Por favor, intenta más tarde o escúchanos en la
+          radio.
         </p>
         <div className="flex flex-col sm:flex-row gap-4">
           <Button
@@ -71,21 +52,26 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
     )
   }
 
+  if (isLoading) {
+    return (
+      <div
+        className="rounded-lg overflow-hidden border border-[#e9b11a]/20 bg-[#1a1a2e]"
+        style={{ aspectRatio: "16/9", minHeight: "340px" }}
+      >
+        <Skeleton className="w-full h-full bg-[#e9b11a]/10" />
+      </div>
+    )
+  }
+
   return (
     <div className="rounded-lg overflow-hidden border border-[#e9b11a]/20">
-      {isLoading && (
-        <div style={{ aspectRatio: "16/9", minHeight: "340px" }}>
-          <Skeleton className="w-full h-full bg-[#e9b11a]/10" />
-        </div>
-      )}
       <iframe
-        ref={iframeRef}
         src={streamUrl}
         width="100%"
-        style={{ aspectRatio: "16/9", minHeight: "340px", display: isLoading ? "none" : "block" }}
+        style={{ aspectRatio: "16/9", minHeight: "340px" }}
         frameBorder="0"
         scrolling="no"
-        allow="autoplay; fullscreen"
+        allow="autoplay"
         allowFullScreen
         title="Transmisión en vivo de Un Café con JJ"
         aria-label="Reproductor de video en vivo"
