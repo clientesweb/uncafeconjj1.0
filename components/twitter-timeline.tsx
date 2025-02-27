@@ -20,6 +20,9 @@ export function TwitterTimeline() {
     timeline.setAttribute("data-chrome", "noheader nofooter noscrollbar transparent")
     timeline.setAttribute("data-height", "500")
     timeline.setAttribute("data-tweet-limit", "5")
+    timeline.setAttribute("data-theme", "dark")
+    timeline.setAttribute("data-link-color", "#e9b11a")
+    timeline.setAttribute("data-border-color", "#e9b11a20")
     timeline.setAttribute("href", "https://twitter.com/UnCafeConJJ")
 
     // Limpiar y agregar el timeline
@@ -44,7 +47,7 @@ export function TwitterTimeline() {
 
   return (
     <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20">
-      <div ref={containerRef} className="w-full max-w-[550px] mx-auto h-[500px] overflow-hidden" />
+      <div ref={containerRef} className="w-full max-w-[550px] mx-auto h-[500px] overflow-hidden twitter-dark-theme" />
     </Card>
   )
 }
