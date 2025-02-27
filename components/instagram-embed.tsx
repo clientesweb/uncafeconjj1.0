@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { Card } from "@/components/ui/card"
 
 interface InstagramEmbedProps {
   postUrl: string
@@ -10,43 +11,47 @@ export function InstagramEmbed({ postUrl }: InstagramEmbedProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Crear el elemento del embed
-    const embed = document.createElement("blockquote")
-    embed.className = "instagram-media"
-    embed.setAttribute("data-instgrm-permalink", postUrl)
-    embed.style.width = "100%"
-    embed.style.maxWidth = "540px"
-    embed.style.margin = "0 auto"
+    const loadInstagramEmbed = () => {
+      if (containerRef.current) {
+        containerRef.current.innerHTML = ""
+      }
 
-    // Limpiar el contenedor y agregar el nuevo embed
-    if (containerRef.current) {
-      containerRef.current.innerHTML = ""
-      containerRef.current.appendChild(embed)
-    }
+      const embed = document.createElement("blockquote")
+      embed.className = "instagram-media"
+      embed.setAttribute("data-instgrm-permalink", postUrl)
+      embed.setAttribute("data-instgrm-version", "14")
 
-    // Cargar el script de Instagram
-    const script = document.createElement("script")
-    script.src = "https://www.instagram.com/embed.js"
-    script.async = true
-    document.body.appendChild(script)
+      if (containerRef.current) {
+        containerRef.current.appendChild(embed)
+      }
 
-    return () => {
-      if (script.parentNode) {
-        script.parentNode.removeChild(script)
+      if (window.instgrm) {
+        window.instgrm.Embeds.process()
+      } else {
+        const script = document.createElement("script")
+        script.src = "https://www.instagram.com/embed.js"
+        script.async = true
+        document.head.appendChild(script)
       }
     }
+
+    loadInstagramEmbed()
   }, [postUrl])
 
   return (
-    <div
-      ref={containerRef}
-      style={{
-        width: "100%",
-        maxWidth: "540px",
-        margin: "0 auto",
-        minHeight: "540px",
-      }}
-    />
+    <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20 w-full max-w-[540px]">
+      <div ref={containerRef} className="instagram-embed-container" />
+    </Card>
   )
+}
+
+declare global {
+  interface Window {
+    instgrm?: {
+      Embeds: {
+        process: () => void
+      }
+    }
+  }
 }
 
