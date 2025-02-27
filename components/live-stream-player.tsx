@@ -13,32 +13,39 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
+  const retryCount = useRef(0)
+  const maxRetries = 3
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-      checkIframeAccess()
-    }, 2000)
+    const checkIframeAccess = () => {
+      if (iframeRef.current) {
+        try {
+          const iframeContent = iframeRef.current.contentWindow
+          if (!iframeContent) {
+            throw new Error("Cannot access iframe content")
+          }
+          setIsLoading(false)
+          setHasError(false)
+        } catch (error) {
+          console.error("Error accessing iframe content:", error)
+          if (retryCount.current < maxRetries) {
+            retryCount.current += 1
+            setTimeout(checkIframeAccess, 2000) // Retry after 2 seconds
+          } else {
+            setIsLoading(false)
+            setHasError(true)
+          }
+        }
+      } else {
+        setIsLoading(false)
+        setHasError(true)
+      }
+    }
+
+    const timer = setTimeout(checkIframeAccess, 2000)
 
     return () => clearTimeout(timer)
   }, [])
-
-  const checkIframeAccess = () => {
-    if (iframeRef.current) {
-      try {
-        // Attempt to access the iframe content
-        const iframeContent = iframeRef.current.contentWindow
-        if (!iframeContent) {
-          setHasError(true)
-        }
-      } catch (error) {
-        console.error("Error accessing iframe content:", error)
-        setHasError(true)
-      }
-    } else {
-      setHasError(true)
-    }
-  }
 
   if (hasError) {
     return (
@@ -88,10 +95,6 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
         allowFullScreen
         title="Transmisión en vivo de Un Café con JJ"
         aria-label="Reproductor de video en vivo"
-        onLoad={() => {
-          setIsLoading(false)
-          checkIframeAccess()
-        }}
       ></iframe>
     </div>
   )
