@@ -13,13 +13,12 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const iframeRef = useRef<HTMLIFrameElement>(null)
-  const retryCount = useRef(0)
-  const maxRetries = 3
 
   useEffect(() => {
     const checkIframeAccess = () => {
       if (iframeRef.current) {
         try {
+          // Attempt to access the iframe content
           const iframeContent = iframeRef.current.contentWindow
           if (!iframeContent) {
             throw new Error("Cannot access iframe content")
@@ -28,13 +27,8 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
           setHasError(false)
         } catch (error) {
           console.error("Error accessing iframe content:", error)
-          if (retryCount.current < maxRetries) {
-            retryCount.current += 1
-            setTimeout(checkIframeAccess, 2000) // Retry after 2 seconds
-          } else {
-            setIsLoading(false)
-            setHasError(true)
-          }
+          setIsLoading(false)
+          setHasError(true)
         }
       } else {
         setIsLoading(false)
@@ -42,7 +36,7 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
       }
     }
 
-    const timer = setTimeout(checkIframeAccess, 2000)
+    const timer = setTimeout(checkIframeAccess, 5000) // Increase timeout to 5 seconds
 
     return () => clearTimeout(timer)
   }, [])
