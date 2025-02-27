@@ -7,32 +7,39 @@ export function TwitterTimeline() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const loadTwitterWidget = () => {
-      // Limpiar cualquier timeline existente
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ""
-      }
-
-      // Crear nuevo elemento de timeline
-      const timeline = document.createElement("a")
-      timeline.className = "twitter-timeline"
-      timeline.setAttribute("data-theme", "dark")
-      timeline.setAttribute("data-chrome", "noheader nofooter noscrollbar transparent")
-      timeline.setAttribute("data-tweet-limit", "5")
-      timeline.setAttribute("href", "https://twitter.com/UnCafeConJJ")
-
-      if (containerRef.current) {
-        containerRef.current.appendChild(timeline)
-      }
-
-      // Cargar el script de Twitter
-      const script = document.createElement("script")
-      script.src = "https://platform.twitter.com/widgets.js"
-      script.async = true
-      document.head.appendChild(script)
+    // Remover cualquier script previo de Twitter
+    const existingScript = document.getElementById("twitter-widget-script")
+    if (existingScript) {
+      existingScript.remove()
     }
 
-    loadTwitterWidget()
+    // Crear el timeline
+    const timeline = document.createElement("a")
+    timeline.className = "twitter-timeline"
+    timeline.setAttribute("data-theme", "dark")
+    timeline.setAttribute("data-chrome", "noheader nofooter noscrollbar transparent")
+    timeline.setAttribute("data-height", "500")
+    timeline.setAttribute("data-tweet-limit", "5")
+    timeline.setAttribute("href", "https://twitter.com/UnCafeConJJ")
+
+    // Limpiar y agregar el timeline
+    if (containerRef.current) {
+      containerRef.current.innerHTML = ""
+      containerRef.current.appendChild(timeline)
+    }
+
+    // Cargar el script de Twitter de forma controlada
+    const script = document.createElement("script")
+    script.id = "twitter-widget-script"
+    script.src = "https://platform.twitter.com/widgets.js"
+    script.async = true
+    document.body.appendChild(script)
+
+    return () => {
+      if (script && script.parentNode) {
+        script.parentNode.removeChild(script)
+      }
+    }
   }, [])
 
   return (
