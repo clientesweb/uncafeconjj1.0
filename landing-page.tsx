@@ -204,7 +204,7 @@ export default function LandingPage() {
                     ÚLTIMAS NOTICIAS
                   </h2>
                   <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl">
-                    Mantente al día con las últimas actualizaciones de Un Café con JJ.
+                    Mantente al día con los últimos 5 tweets de Un Café con JJ.
                   </p>
                 </div>
               </div>
