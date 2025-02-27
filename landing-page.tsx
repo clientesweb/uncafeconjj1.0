@@ -171,10 +171,10 @@ export default function LandingPage() {
               <div className="flex items-center justify-center">
                 <Image
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg"
-                  width={1920}
-                  height={1080}
+                  width={2048}
+                  height={819}
                   alt="Jimmy Jairala presentando Un Café con JJ"
-                  className="rounded-lg object-cover w-full h-auto aspect-[16/9]"
+                  className="rounded-lg object-cover w-full h-auto"
                   priority
                 />
               </div>
