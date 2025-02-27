@@ -1,16 +1,32 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import Script from "next/script"
 
 export function TwitterTimeline() {
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false)
+  const [isScriptError, setIsScriptError] = useState(false)
+
   useEffect(() => {
     // Reinitialize Twitter widgets when component mounts
     if ((window as any).twttr) {
-      ;(window as any).twttr.widgets.load()
+      try {
+        ;(window as any).twttr.widgets.load()
+      } catch (error) {
+        console.error("Error loading Twitter widgets:", error)
+      }
     }
+
+    // Set a timeout to show an error message if Twitter doesn't load
+    const timeoutId = setTimeout(() => {
+      if (!(window as any).twttr?.widgets) {
+        setIsScriptError(true)
+      }
+    }, 10000)
+
+    return () => clearTimeout(timeoutId)
   }, [])
 
   return (
@@ -19,8 +35,20 @@ export function TwitterTimeline() {
         src="https://platform.twitter.com/widgets.js"
         strategy="lazyOnload"
         onLoad={() => {
+          setIsScriptLoaded(true)
           // Reload widgets after script loads
-          ;(window as any).twttr.widgets.load()
+          try {
+            if ((window as any).twttr?.widgets) {
+              ;(window as any).twttr.widgets.load()
+            }
+          } catch (error) {
+            console.error("Error loading Twitter widgets after script load:", error)
+            setIsScriptError(true)
+          }
+        }}
+        onError={() => {
+          console.error("Error loading Twitter script")
+          setIsScriptError(true)
         }}
       />
       <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20">
@@ -32,6 +60,15 @@ export function TwitterTimeline() {
             <Skeleton className="h-20 w-full bg-[#e9b11a]/10" />
             <Skeleton className="h-20 w-full bg-[#e9b11a]/10" />
           </div>
+
+          {isScriptError && (
+            <div className="absolute inset-0 flex items-center justify-center p-4 bg-[#1a1a2e]/90 z-10">
+              <p className="text-center text-red-400">
+                No se pudo cargar el timeline de Twitter. Por favor, verifica tu conexión e intenta nuevamente.
+              </p>
+            </div>
+          )}
+
           {/* Twitter Timeline */}
           <a
             className="twitter-timeline"
