@@ -311,7 +311,6 @@ export default function LandingPage() {
           <YouTubeVideosSection
             regularPlaylistId="PLSwBXxeopk-xySzecvVbfGTqnCTi8QhtE"
             shortsPlaylistId="PLSwBXxeopk-xUhmNW4jOBi8Olkr_4p2Rc"
-            apiKey={process.env.NEXT_PUBLIC_YOUTUBE_API_KEY || ""}
           />
         </section>
 
