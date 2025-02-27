@@ -10,7 +10,6 @@ export function TwitterTimeline() {
   const [isScriptError, setIsScriptError] = useState(false)
 
   useEffect(() => {
-    // Reinitialize Twitter widgets when component mounts
     if ((window as any).twttr) {
       try {
         ;(window as any).twttr.widgets.load()
@@ -19,7 +18,6 @@ export function TwitterTimeline() {
       }
     }
 
-    // Set a timeout to show an error message if Twitter doesn't load
     const timeoutId = setTimeout(() => {
       if (!(window as any).twttr?.widgets) {
         setIsScriptError(true)
@@ -30,13 +28,12 @@ export function TwitterTimeline() {
   }, [])
 
   return (
-    <div className="relative min-h-[600px] w-full">
+    <div className="relative w-full">
       <Script
         src="https://platform.twitter.com/widgets.js"
         strategy="lazyOnload"
         onLoad={() => {
           setIsScriptLoaded(true)
-          // Reload widgets after script loads
           try {
             if ((window as any).twttr?.widgets) {
               ;(window as any).twttr.widgets.load()
@@ -75,6 +72,7 @@ export function TwitterTimeline() {
             data-theme="dark"
             data-chrome="noheader nofooter noborders transparent"
             data-height="600"
+            data-width="100%"
             href="https://twitter.com/uncafeconjj"
             target="_blank"
             rel="noopener noreferrer"
