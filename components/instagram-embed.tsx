@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import Script from "next/script"
@@ -10,11 +10,27 @@ interface InstagramEmbedProps {
 }
 
 export function InstagramEmbed({ postId }: InstagramEmbedProps) {
+  const [isScriptLoaded, setIsScriptLoaded] = useState(false)
+  const [isScriptError, setIsScriptError] = useState(false)
+
   useEffect(() => {
     // Reinitialize Instagram embeds when component mounts
     if ((window as any).instgrm) {
-      ;(window as any).instgrm.Embeds.process()
+      try {
+        ;(window as any).instgrm.Embeds.process()
+      } catch (error) {
+        console.error("Error processing Instagram embeds:", error)
+      }
     }
+
+    // Set a timeout to show an error message if Instagram doesn't load
+    const timeoutId = setTimeout(() => {
+      if (!(window as any).instgrm?.Embeds) {
+        setIsScriptError(true)
+      }
+    }, 10000)
+
+    return () => clearTimeout(timeoutId)
   }, [])
 
   return (
@@ -23,8 +39,20 @@ export function InstagramEmbed({ postId }: InstagramEmbedProps) {
         src="https://www.instagram.com/embed.js"
         strategy="lazyOnload"
         onLoad={() => {
+          setIsScriptLoaded(true)
           // Process embeds after script loads
-          ;(window as any).instgrm.Embeds.process()
+          try {
+            if ((window as any).instgrm?.Embeds) {
+              ;(window as any).instgrm.Embeds.process()
+            }
+          } catch (error) {
+            console.error("Error processing Instagram embeds after script load:", error)
+            setIsScriptError(true)
+          }
+        }}
+        onError={() => {
+          console.error("Error loading Instagram script")
+          setIsScriptError(true)
         }}
       />
       <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20">
@@ -35,6 +63,15 @@ export function InstagramEmbed({ postId }: InstagramEmbedProps) {
             <Skeleton className="aspect-square w-full bg-[#e9b11a]/10" />
             <Skeleton className="h-16 w-full bg-[#e9b11a]/10" />
           </div>
+
+          {isScriptError && (
+            <div className="absolute inset-0 flex items-center justify-center p-4 bg-[#1a1a2e]/90 z-10">
+              <p className="text-center text-red-400">
+                No se pudo cargar la publicación de Instagram. Por favor, verifica tu conexión e intenta nuevamente.
+              </p>
+            </div>
+          )}
+
           {/* Instagram Post */}
           <blockquote
             className="instagram-media"
@@ -48,6 +85,7 @@ export function InstagramEmbed({ postId }: InstagramEmbedProps) {
               margin: "0",
               minWidth: "326px",
               padding: "0",
+              minHeight: "400px",
             }}
             onClick={() => window.open(`https://www.instagram.com/p/${postId}/`, "_blank")}
             role="link"
