@@ -4,54 +4,28 @@ import { useEffect, useRef } from "react"
 import { Card } from "@/components/ui/card"
 
 interface InstagramEmbedProps {
-  postUrl: string
+  postId: string
 }
 
-export function InstagramEmbed({ postUrl }: InstagramEmbedProps) {
-  const containerRef = useRef<HTMLDivElement>(null)
+export function InstagramEmbed({ postId }: InstagramEmbedProps) {
+  const iframeRef = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
-    const loadInstagramEmbed = () => {
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ""
-      }
-
-      const embed = document.createElement("blockquote")
-      embed.className = "instagram-media"
-      embed.setAttribute("data-instgrm-permalink", postUrl)
-      embed.setAttribute("data-instgrm-version", "14")
-
-      if (containerRef.current) {
-        containerRef.current.appendChild(embed)
-      }
-
-      if (window.instgrm) {
-        window.instgrm.Embeds.process()
-      } else {
-        const script = document.createElement("script")
-        script.src = "https://www.instagram.com/embed.js"
-        script.async = true
-        document.head.appendChild(script)
+    const loadEmbed = () => {
+      if (iframeRef.current) {
+        iframeRef.current.src = `https://www.instagram.com/p/${postId}/embed/captioned/`
       }
     }
 
-    loadInstagramEmbed()
-  }, [postUrl])
+    loadEmbed()
+  }, [postId])
 
   return (
-    <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20 w-full max-w-[540px]">
-      <div ref={containerRef} className="instagram-embed-container" />
+    <Card className="instagram-card bg-[#1a1a2e] border-[#e9b11a]/20 overflow-hidden">
+      <div className="instagram-container">
+        <iframe ref={iframeRef} className="instagram-iframe" loading="lazy" allowFullScreen />
+      </div>
     </Card>
   )
-}
-
-declare global {
-  interface Window {
-    instgrm?: {
-      Embeds: {
-        process: () => void
-      }
-    }
-  }
 }
 
