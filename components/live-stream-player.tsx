@@ -14,11 +14,9 @@ export function LiveStreamPlayer({ streamUrl }: LiveStreamPlayerProps) {
   const [hasError, setHasError] = useState(false)
 
   useEffect(() => {
-    // Simulate checking if the stream is available
     const timer = setTimeout(() => {
       setIsLoading(false)
-      // If the streamUrl is empty or invalid, show error state
-      setHasError(!streamUrl || streamUrl.includes("STREAM_URL"))
+      setHasError(!streamUrl)
     }, 2000)
 
     return () => clearTimeout(timer)
