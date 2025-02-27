@@ -11,9 +11,6 @@ import { MobileMenu } from "./components/mobile-menu"
 import { WhatsAppButton } from "./components/whatsapp-button"
 import { StructuredData } from "./components/structured-data"
 import { TopBanner } from "./components/top-banner"
-import { TwitterTimeline } from "./components/twitter-timeline"
-import { InstagramPosts } from "./components/instagram-posts"
-import { Suspense } from "react"
 import { LiveStreamPlayer } from "./components/live-stream-player"
 
 export default function LandingPage() {
@@ -61,12 +58,6 @@ export default function LandingPage() {
               className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a]"
             >
               PROGRAMA
-            </button>
-            <button
-              onClick={() => scrollToSection("twitter")}
-              className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a]"
-            >
-              NOTICIAS
             </button>
             <button
               onClick={() => scrollToSection("videos")}
@@ -193,31 +184,6 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-
-        {/* Social Media Sections with Suspense */}
-        <Suspense fallback={<div className="w-full h-[400px] bg-[#1a1a2e] animate-pulse" />}>
-          <section id="twitter" className="w-full py-12 md:py-24 lg:py-32" aria-labelledby="twitter-title">
-            <div className="container px-4 md:px-6">
-              <div className="flex flex-col items-center justify-center space-y-4 text-center">
-                <div className="space-y-2">
-                  <h2 id="twitter-title" className="text-3xl font-bold tracking-tighter text-white md:text-4xl/tight">
-                    ÚLTIMAS NOTICIAS
-                  </h2>
-                  <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl">
-                    Mantente al día con los últimos 5 tweets de Un Café con JJ.
-                  </p>
-                </div>
-              </div>
-              <div className="mx-auto max-w-3xl mt-8">
-                <TwitterTimeline />
-              </div>
-            </div>
-          </section>
-        </Suspense>
-
-        <Suspense fallback={<div className="w-full h-[400px] bg-[#1a1a2e] animate-pulse" />}>
-          <InstagramPosts />
-        </Suspense>
 
         {/* Program Info Section */}
         <section id="programa" className="w-full py-12 md:py-24 lg:py-32 bg-[#111122]" aria-labelledby="program-title">
