@@ -15,7 +15,7 @@ export function InstagramPosts() {
           </div>
         </div>
         <div className="mx-auto max-w-5xl mt-8">
-          <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2">
+          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 place-items-center">
             <InstagramEmbed postUrl="https://www.instagram.com/p/DGigXykR13T/" />
             <InstagramEmbed postUrl="https://www.instagram.com/p/DGiY18vxPB7/" />
           </div>
