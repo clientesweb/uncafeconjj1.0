@@ -23,10 +23,12 @@ export function YouTubeVideosSection({ regularPlaylistId, shortsPlaylistId, apiK
       try {
         setLoading(true)
         setError(null)
+        console.log("Fetching videos with:", { regularPlaylistId, shortsPlaylistId, apiKey }) // Debug log
         const [regular, shorts] = await Promise.all([
           fetchPlaylistVideos(regularPlaylistId, apiKey),
           fetchPlaylistVideos(shortsPlaylistId, apiKey),
         ])
+        console.log("Fetched videos:", { regular, shorts }) // Debug log
         if (regular.length === 0 && shorts.length === 0) {
           setError("No se pudieron cargar los videos. Por favor, verifica los IDs de las playlists y la clave de API.")
         } else {
