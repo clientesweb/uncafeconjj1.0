@@ -15,6 +15,7 @@ interface YouTubeVideoCardProps {
 
 export function YouTubeVideoCard({ video, isShort = false }: YouTubeVideoCardProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [imageError, setImageError] = useState(false)
 
   const timeAgo = formatDistanceToNow(new Date(video.publishedAt), {
     addSuffix: true,
@@ -24,6 +25,17 @@ export function YouTubeVideoCard({ video, isShort = false }: YouTubeVideoCardPro
   // Placeholder blur data URL (gris claro)
   const blurDataURL =
     "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQrJyEwPDY2ODYyTEhMR0BGRlNCRkJHYGFjYWM4OTtBV0VGUElGYWZYZFD/2wBDARUXFyAeIBogHh4gIiAyRzJHMkZGR0dGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkb/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+
+  // Función para manejar errores de carga de imagen
+  const handleImageError = () => {
+    setImageError(true)
+  }
+
+  // URL de imagen de respaldo si la original falla
+  const fallbackImageUrl = `/placeholder.svg?height=${isShort ? 720 : 480}&width=${isShort ? 405 : 720}`
+
+  // Determinar qué URL de imagen usar
+  const imageUrl = imageError ? fallbackImageUrl : video.thumbnail || fallbackImageUrl
 
   return (
     <>
@@ -41,7 +53,7 @@ export function YouTubeVideoCard({ video, isShort = false }: YouTubeVideoCardPro
           <div className="relative overflow-hidden rounded-lg">
             <div className={`relative ${isShort ? "aspect-[9/16]" : "aspect-video"}`}>
               <Image
-                src={video.thumbnail || "/placeholder.svg"}
+                src={imageUrl || "/placeholder.svg"}
                 alt={video.title}
                 fill
                 sizes={
@@ -52,6 +64,7 @@ export function YouTubeVideoCard({ video, isShort = false }: YouTubeVideoCardPro
                 loading="lazy"
                 placeholder="blur"
                 blurDataURL={blurDataURL}
+                onError={handleImageError}
               />
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
