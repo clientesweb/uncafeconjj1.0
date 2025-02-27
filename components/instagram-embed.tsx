@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import { Card } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
 import { Instagram } from "lucide-react"
 
 interface InstagramEmbedProps {
@@ -13,38 +12,27 @@ export function InstagramEmbed({ postUrl }: InstagramEmbedProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
-  const [isReel, setIsReel] = useState(false)
 
   useEffect(() => {
-    // Check if it's a Reel based on the URL
-    setIsReel(postUrl.includes("/reel/"))
-
     const loadInstagramEmbed = () => {
       try {
-        // Remove any existing embeds
-        if (containerRef.current?.querySelector(".instagram-media")) {
-          containerRef.current.querySelector(".instagram-media")?.remove()
-        }
-
         // Create new embed
         const embed = document.createElement("blockquote")
         embed.className = "instagram-media"
+        embed.setAttribute("data-instgrm-captioned", "")
         embed.setAttribute("data-instgrm-permalink", postUrl)
         embed.setAttribute("data-instgrm-version", "14")
-        embed.style.background = "#1a1a2e"
-        embed.style.border = "1px solid rgba(233, 177, 26, 0.2)"
-        embed.style.borderRadius = "8px"
-        embed.style.boxShadow = "none"
-        embed.style.margin = "0"
-        embed.style.padding = "0"
-        embed.style.width = "100%"
 
         if (containerRef.current) {
+          containerRef.current.innerHTML = ""
           containerRef.current.appendChild(embed)
         }
 
         // Load Instagram embed script
-        if (!window.instgrm) {
+        if (window.instgrm) {
+          window.instgrm.Embeds.process()
+          setTimeout(() => setIsLoading(false), 1000)
+        } else {
           const script = document.createElement("script")
           script.src = "https://www.instagram.com/embed.js"
           script.async = true
@@ -55,9 +43,6 @@ export function InstagramEmbed({ postUrl }: InstagramEmbedProps) {
             }
           }
           document.head.appendChild(script)
-        } else {
-          window.instgrm.Embeds.process()
-          setTimeout(() => setIsLoading(false), 1000)
         }
       } catch (error) {
         console.error("Error loading Instagram embed:", error)
@@ -74,16 +59,14 @@ export function InstagramEmbed({ postUrl }: InstagramEmbedProps) {
           observer.disconnect()
         }
       },
-      { threshold: 0.1, rootMargin: "50px" },
+      { threshold: 0.1 },
     )
 
     if (containerRef.current) {
       observer.observe(containerRef.current)
     }
 
-    return () => {
-      observer.disconnect()
-    }
+    return () => observer.disconnect()
   }, [postUrl])
 
   if (hasError) {
@@ -106,23 +89,11 @@ export function InstagramEmbed({ postUrl }: InstagramEmbedProps) {
   }
 
   return (
-    <Card className="overflow-hidden bg-[#1a1a2e] border-[#e9b11a]/20">
-      <div
-        ref={containerRef}
-        className={`instagram-media-wrapper ${isReel ? "reel-container" : ""}`}
-        aria-live="polite"
-      >
-        {isLoading && (
-          <div className="p-4">
-            <Skeleton className={`w-full ${isReel ? "h-[400px]" : "aspect-square"} bg-[#e9b11a]/10`} />
-            <div className="mt-4 space-y-2">
-              <Skeleton className="h-4 w-3/4 bg-[#e9b11a]/10" />
-              <Skeleton className="h-4 w-1/2 bg-[#e9b11a]/10" />
-            </div>
-          </div>
-        )}
+    <div className="w-full max-w-xl mx-auto">
+      <div ref={containerRef} className="instagram-media-wrapper" aria-live="polite">
+        {isLoading && <div className="aspect-square w-full bg-[#e9b11a]/10 rounded-lg" />}
       </div>
-    </Card>
+    </div>
   )
 }
 
