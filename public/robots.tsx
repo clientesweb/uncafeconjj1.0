@@ -1,5 +1,13 @@
-User-agent: *
-Allow: /
+import type { MetadataRoute } from "next"
 
-Sitemap: https://uncafeconjj.com/sitemap.xml
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: "/private/",
+    },
+    sitemap: "https://uncafeconjj.com/sitemap.xml",
+  }
+}
 
