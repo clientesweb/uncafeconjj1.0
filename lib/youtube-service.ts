@@ -18,7 +18,7 @@ export async function fetchPlaylistVideos(playlistId: string, apiKey: string, ma
     const response = await fetch(url)
 
     if (!response.ok) {
-      const errorData = await response.json()
+      const errorData = await response.json().catch(() => ({}))
       console.error(`YouTube API error: ${response.status}`, errorData)
       throw new Error(`YouTube API error: ${response.status} - ${JSON.stringify(errorData)}`)
     }
@@ -42,7 +42,11 @@ export async function fetchPlaylistVideos(playlistId: string, apiKey: string, ma
     }))
   } catch (error) {
     console.error("Error fetching YouTube videos:", error)
-    throw error
+    if (error instanceof Error) {
+      throw new Error(`Error fetching YouTube videos: ${error.message}`)
+    } else {
+      throw new Error("An unknown error occurred while fetching YouTube videos")
+    }
   }
 }
 
