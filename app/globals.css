@@ -65,20 +65,13 @@ body {
   color: hsl(var(--primary));
 }
 
-/* Twitter Timeline styles */
-.twitter-timeline-wrapper {
-  width: 100% !important;
-  max-width: 540px !important;
-  margin: 0 auto !important;
-  min-height: 600px;
-}
-
 /* Instagram Embed styles */
 .instagram-media-wrapper {
   width: 100% !important;
   max-width: 540px !important;
   margin: 0 auto !important;
   min-height: 600px;
+  position: relative;
 }
 
 .instagram-media {
@@ -91,8 +84,17 @@ iframe.instagram-media {
   min-height: 600px !important;
 }
 
+/* Twitter Timeline styles */
+.twitter-timeline-wrapper {
+  width: 100% !important;
+  max-width: 540px !important;
+  margin: 0 auto !important;
+  min-height: 600px;
+  position: relative;
+}
+
 /* Responsive adjustments */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .twitter-timeline-wrapper,
   .instagram-media-wrapper {
     min-height: 500px;
@@ -100,6 +102,28 @@ iframe.instagram-media {
 
   iframe.instagram-media {
     min-height: 500px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .twitter-timeline-wrapper,
+  .instagram-media-wrapper {
+    min-height: 450px;
+  }
+
+  iframe.instagram-media {
+    min-height: 450px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .twitter-timeline-wrapper,
+  .instagram-media-wrapper {
+    min-height: 400px;
+  }
+
+  iframe.instagram-media {
+    min-height: 400px !important;
   }
 }
 
