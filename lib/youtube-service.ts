@@ -14,7 +14,7 @@ export async function fetchPlaylistVideos(playlistId: string, apiKey: string, ma
     }
 
     const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=${maxResults}&playlistId=${playlistId}&key=${apiKey}`,
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=${maxResults}&playlistId=${playlistId}&key=${apiKey}`
     )
 
     if (!response.ok) {
@@ -33,10 +33,9 @@ export async function fetchPlaylistVideos(playlistId: string, apiKey: string, ma
     return data.items.map((item: any) => ({
       id: item.snippet?.resourceId?.videoId || "",
       title: item.snippet?.title || "Video sin título",
-      thumbnail:
-        item.snippet?.thumbnails?.high?.url ||
-        item.snippet?.thumbnails?.default?.url ||
-        "/placeholder.svg?height=720&width=1280",
+      thumbnail: item.snippet?.thumbnails?.high?.url || 
+                item.snippet?.thumbnails?.default?.url || 
+                "/placeholder.svg?height=720&width=1280",
       publishedAt: item.snippet?.publishedAt || new Date().toISOString(),
     }))
   } catch (error) {
