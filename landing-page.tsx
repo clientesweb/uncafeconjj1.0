@@ -30,7 +30,7 @@ export default function LandingPage() {
         className="sticky top-0 z-50 w-full border-b border-[#e9b11a]/20 bg-[#1a1a2e]/95 backdrop-blur supports-[backdrop-filter]:bg-[#1a1a2e]/60"
         role="banner"
       >
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-2">
             <MobileMenu />
             <Link href="/" className="flex items-center gap-2" aria-label="Un Café con JJ - Inicio">
@@ -39,14 +39,14 @@ export default function LandingPage() {
                 width={48}
                 height={48}
                 alt="Un Café con JJ Logo"
-                className="h-10 w-10 rounded-full"
+                className="h-8 w-8 sm:h-10 sm:w-10 rounded-full"
                 priority
               />
-              <span className="text-xl font-bold text-white">Un Café con JJ</span>
+              <span className="text-lg sm:text-xl font-bold text-white">Un Café con JJ</span>
             </Link>
           </div>
 
-          <nav className="hidden md:flex gap-6" role="navigation" aria-label="Navegación principal">
+          <nav className="hidden md:flex gap-4 lg:gap-6" role="navigation" aria-label="Navegación principal">
             <button
               onClick={() => scrollToSection("en-vivo")}
               className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a]"
@@ -87,7 +87,7 @@ export default function LandingPage() {
       <main id="main-content" className="flex-1" role="main">
         {/* Hero Section */}
         <section className="w-full border-b border-[#e9b11a]/20" aria-labelledby="hero-title">
-          <div className="relative w-full h-[calc(100vh-4rem)] min-h-[600px]">
+          <div className="relative w-full h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] min-h-[500px] sm:min-h-[600px]">
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg"
               layout="fill"
@@ -96,20 +96,22 @@ export default function LandingPage() {
               priority
             />
             <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center">
-              <div className="container px-4 md:px-6">
-                <div className="max-w-[600px]">
+              <div className="container px-4 sm:px-6 md:px-8">
+                <div className="max-w-[600px] space-y-4 sm:space-y-6">
                   <h1
                     id="hero-title"
-                    className="text-3xl font-bold tracking-tighter text-white sm:text-5xl xl:text-6xl/none mb-4"
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl/none font-bold tracking-tighter text-white"
                   >
                     Un Café con <span className="text-[#e9b11a]">JJ</span>
                   </h1>
-                  <p className="text-[#e9b11a] md:text-xl mb-2">TRINCHERA DEL PENSAMIENTO LIBRE</p>
-                  <p className="text-gray-200 md:text-xl mb-6">Noticias, análisis y opinión con Jimmy Jairala.</p>
-                  <div className="flex flex-col gap-2 sm:flex-row mb-6">
+                  <p className="text-lg sm:text-xl md:text-2xl text-[#e9b11a]">TRINCHERA DEL PENSAMIENTO LIBRE</p>
+                  <p className="text-base sm:text-lg md:text-xl text-gray-200">
+                    Noticias, análisis y opinión con Jimmy Jairala.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-2">
                     <Button
                       size="lg"
-                      className="h-12 bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
+                      className="h-10 sm:h-12 text-sm sm:text-base bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
                       onClick={() => scrollToSection("en-vivo")}
                     >
                       VER EN VIVO
@@ -117,47 +119,47 @@ export default function LandingPage() {
                     <Button
                       size="lg"
                       variant="outline"
-                      className="h-12 text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
+                      className="h-10 sm:h-12 text-sm sm:text-base text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e]"
                       onClick={() => scrollToSection("programa")}
                     >
                       PROGRAMACIÓN
                     </Button>
                   </div>
-                  <div className="flex flex-wrap gap-4" role="list" aria-label="Redes sociales">
+                  <div className="flex flex-wrap gap-3 sm:gap-4 pt-2" role="list" aria-label="Redes sociales">
                     <Link
                       href="https://facebook.com/uncafeconjj"
                       className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                       aria-label="Síguenos en Facebook"
                     >
-                      <Facebook className="h-6 w-6" aria-hidden="true" />
+                      <Facebook className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                     </Link>
                     <Link
                       href="https://instagram.com/uncafeconjj"
                       className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                       aria-label="Síguenos en Instagram"
                     >
-                      <Instagram className="h-6 w-6" aria-hidden="true" />
+                      <Instagram className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                     </Link>
                     <Link
                       href="https://youtube.com/uncafeconjj"
                       className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                       aria-label="Síguenos en YouTube"
                     >
-                      <Youtube className="h-6 w-6" aria-hidden="true" />
+                      <Youtube className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                     </Link>
                     <Link
                       href="https://twitter.com/uncafeconjj"
                       className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                       aria-label="Síguenos en Twitter"
                     >
-                      <Twitter className="h-6 w-6" aria-hidden="true" />
+                      <Twitter className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                     </Link>
                     <Link
                       href="#"
                       className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                       aria-label="Síguenos en TikTok"
                     >
-                      <TikTok className="h-6 w-6" aria-hidden="true" />
+                      <TikTok className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                     </Link>
                   </div>
                 </div>
@@ -167,49 +169,56 @@ export default function LandingPage() {
         </section>
 
         {/* Live Stream Section */}
-        <section id="en-vivo" className="w-full py-12 md:py-24 lg:py-32" aria-labelledby="live-title">
-          <div className="container px-4 md:px-6">
+        <section id="en-vivo" className="w-full py-8 sm:py-12 md:py-16 lg:py-24" aria-labelledby="live-title">
+          <div className="container px-4 sm:px-6 md:px-8">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 id="live-title" className="text-3xl font-bold tracking-tighter text-white md:text-4xl/tight">
+              <div className="space-y-2 sm:space-y-3">
+                <h2 id="live-title" className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tighter text-white">
                   EN VIVO
                 </h2>
-                <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl">
+                <p className="mx-auto max-w-[700px] text-base sm:text-lg md:text-xl text-gray-400">
                   Sintoniza nuestro programa en directo de lunes a viernes de 6:00 a 8:00 a.m.
                 </p>
               </div>
             </div>
-            <div className="mx-auto max-w-5xl mt-8">
+            <div className="mx-auto max-w-5xl mt-6 sm:mt-8">
               <LiveStreamPlayer streamUrl="https://player.castr.com/d_8aea6c10d99811efb5ebf7655896c5a7" />
             </div>
           </div>
         </section>
 
         {/* Program Info Section */}
-        <section id="programa" className="w-full py-12 md:py-24 lg:py-32 bg-[#111122]" aria-labelledby="program-title">
-          <div className="container px-4 md:px-6">
+        <section
+          id="programa"
+          className="w-full py-8 sm:py-12 md:py-16 lg:py-24 bg-[#111122]"
+          aria-labelledby="program-title"
+        >
+          <div className="container px-4 sm:px-6 md:px-8">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 id="program-title" className="text-3xl font-bold tracking-tighter text-white md:text-4xl/tight">
+              <div className="space-y-2 sm:space-y-3">
+                <h2
+                  id="program-title"
+                  className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tighter text-white"
+                >
                   SOBRE EL PROGRAMA
                 </h2>
-                <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl">
+                <p className="mx-auto max-w-[700px] text-base sm:text-lg md:text-xl text-gray-400">
                   Un espacio de análisis, opinión y debate sobre la actualidad nacional e internacional.
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
+            <div className="mx-auto grid max-w-5xl items-center gap-6 py-8 sm:py-12 lg:grid-cols-2 lg:gap-12">
               <div className="flex flex-col justify-center space-y-4">
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-white">Nuestro Presentador</h3>
+                <div className="space-y-3">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white">Nuestro Presentador</h3>
                   <div className="flex flex-col gap-4">
                     <div className="flex items-start gap-4">
                       <div className="rounded-full bg-[#e9b11a]/20 p-2">
-                        <Mic2 className="h-6 w-6 text-[#e9b11a]" />
+                        <Mic2 className="h-5 w-5 sm:h-6 sm:w-6 text-[#e9b11a]" />
                       </div>
                       <div>
-                        <h4 className="text-xl font-bold text-[#e9b11a]">Jimmy Jairala</h4>
-                        <p className="text-gray-400">
+                        <h4 className="text-lg sm:text-xl font-bold text-[#e9b11a]">Jimmy Jairala</h4>
+                        <p className="text-sm sm:text-base text-gray-400">
                           Periodista y analista político con amplia experiencia en medios de comunicación.
                         </p>
                       </div>
@@ -219,41 +228,41 @@ export default function LandingPage() {
               </div>
               <div className="grid gap-4">
                 <Card className="bg-[#1a1a2e] border-[#e9b11a]/20">
-                  <CardContent className="p-6">
+                  <CardContent className="p-4 sm:p-6">
                     <div className="flex items-start gap-4">
                       <div className="rounded-full bg-[#e9b11a]/20 p-2">
-                        <Calendar className="h-6 w-6 text-[#e9b11a]" />
+                        <Calendar className="h-5 w-5 sm:h-6 sm:w-6 text-[#e9b11a]" />
                       </div>
                       <div>
-                        <h4 className="text-xl font-bold text-white">Días de Emisión</h4>
-                        <p className="text-gray-400">Lunes a Viernes</p>
+                        <h4 className="text-lg sm:text-xl font-bold text-white">Días de Emisión</h4>
+                        <p className="text-sm sm:text-base text-gray-400">Lunes a Viernes</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
                 <Card className="bg-[#1a1a2e] border-[#e9b11a]/20">
-                  <CardContent className="p-6">
+                  <CardContent className="p-4 sm:p-6">
                     <div className="flex items-start gap-4">
                       <div className="rounded-full bg-[#e9b11a]/20 p-2">
-                        <Clock className="h-6 w-6 text-[#e9b11a]" />
+                        <Clock className="h-5 w-5 sm:h-6 sm:w-6 text-[#e9b11a]" />
                       </div>
                       <div>
-                        <h4 className="text-xl font-bold text-white">Horario</h4>
-                        <p className="text-gray-400">6:00 a 8:00 a.m.</p>
+                        <h4 className="text-lg sm:text-xl font-bold text-white">Horario</h4>
+                        <p className="text-sm sm:text-base text-gray-400">6:00 a 8:00 a.m.</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
                 <Card className="bg-[#1a1a2e] border-[#e9b11a]/20">
-                  <CardContent className="p-6">
+                  <CardContent className="p-4 sm:p-6">
                     <div className="flex items-start gap-4">
                       <div className="rounded-full bg-[#e9b11a]/20 p-2">
-                        <Radio className="h-6 w-6 text-[#e9b11a]" />
+                        <Radio className="h-5 w-5 sm:h-6 sm:w-6 text-[#e9b11a]" />
                       </div>
                       <div>
-                        <h4 className="text-xl font-bold text-white">Sintoniza</h4>
-                        <p className="text-gray-400">Kocodrilo Radio 94.5 FM</p>
-                        <p className="text-gray-400">Café Radio 91.7 MHz</p>
+                        <h4 className="text-lg sm:text-xl font-bold text-white">Sintoniza</h4>
+                        <p className="text-sm sm:text-base text-gray-400">Kocodrilo Radio 94.5 FM</p>
+                        <p className="text-sm sm:text-base text-gray-400">Café Radio 91.7 MHz</p>
                       </div>
                     </div>
                   </CardContent>
@@ -264,7 +273,7 @@ export default function LandingPage() {
         </section>
 
         {/* YouTube Videos Section */}
-        <section id="videos" className="w-full py-12 md:py-24 lg:py-32" aria-labelledby="videos-title">
+        <section id="videos" className="w-full py-8 sm:py-12 md:py-16 lg:py-24" aria-labelledby="videos-title">
           <YouTubeVideosSection
             regularPlaylistId="PLSwBXxeopk-xySzecvVbfGTqnCTi8QhtE"
             shortsPlaylistId="PLSwBXxeopk-xUhmNW4jOBi8Olkr_4p2Rc"
@@ -273,56 +282,67 @@ export default function LandingPage() {
         </section>
 
         {/* CTA Section */}
-        <section id="contacto" className="w-full py-12 md:py-24 lg:py-32 bg-[#111122]" aria-labelledby="contact-title">
-          <div className="container px-4 md:px-6">
+        <section
+          id="contacto"
+          className="w-full py-8 sm:py-12 md:py-16 lg:py-24 bg-[#111122]"
+          aria-labelledby="contact-title"
+        >
+          <div className="container px-4 sm:px-6 md:px-8">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 id="contact-title" className="text-3xl font-bold tracking-tighter text-white md:text-4xl/tight">
+              <div className="space-y-2 sm:space-y-3">
+                <h2
+                  id="contact-title"
+                  className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tighter text-white"
+                >
                   SÍGUENOS EN REDES SOCIALES
                 </h2>
-                <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl">
+                <p className="mx-auto max-w-[700px] text-base sm:text-lg md:text-xl text-gray-400">
                   Mantente informado y participa en nuestras conversaciones.
                 </p>
               </div>
-              <div className="flex gap-6 pt-4" role="list" aria-label="Redes sociales">
+              <div
+                className="flex flex-wrap justify-center gap-4 sm:gap-6 pt-4"
+                role="list"
+                aria-label="Redes sociales"
+              >
                 <Link
                   href="https://facebook.com/uncafeconjj"
                   className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                   aria-label="Síguenos en Facebook"
                 >
-                  <Facebook className="h-8 w-8" aria-hidden="true" />
+                  <Facebook className="h-6 w-6 sm:h-8 sm:w-8" aria-hidden="true" />
                 </Link>
                 <Link
                   href="https://instagram.com/uncafeconjj"
                   className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                   aria-label="Síguenos en Instagram"
                 >
-                  <Instagram className="h-8 w-8" aria-hidden="true" />
+                  <Instagram className="h-6 w-6 sm:h-8 sm:w-8" aria-hidden="true" />
                 </Link>
                 <Link
                   href="https://youtube.com/uncafeconjj"
                   className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                   aria-label="Síguenos en YouTube"
                 >
-                  <Youtube className="h-8 w-8" aria-hidden="true" />
+                  <Youtube className="h-6 w-6 sm:h-8 sm:w-8" aria-hidden="true" />
                 </Link>
                 <Link
                   href="https://twitter.com/uncafeconjj"
                   className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                   aria-label="Síguenos en Twitter"
                 >
-                  <Twitter className="h-8 w-8" aria-hidden="true" />
+                  <Twitter className="h-6 w-6 sm:h-8 sm:w-8" aria-hidden="true" />
                 </Link>
                 <Link
                   href="#"
                   className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-1"
                   aria-label="Síguenos en TikTok"
                 >
-                  <TikTok className="h-8 w-8" aria-hidden="true" />
+                  <TikTok className="h-6 w-6 sm:h-8 sm:w-8" aria-hidden="true" />
                 </Link>
               </div>
-              <div className="pt-6">
-                <p className="text-gray-400">@UnCafeConJJ - @jimmyjairala</p>
+              <div className="pt-4 sm:pt-6">
+                <p className="text-sm sm:text-base text-gray-400">@UnCafeConJJ - @jimmyjairala</p>
               </div>
             </div>
           </div>
@@ -332,7 +352,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="w-full border-t border-[#e9b11a]/20 bg-[#1a1a2e]" role="contentinfo">
-        <div className="container flex flex-col gap-8 py-8 px-4 md:px-6">
+        <div className="container flex flex-col gap-6 sm:gap-8 py-6 sm:py-8 px-4 sm:px-6 md:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <Image
@@ -340,22 +360,22 @@ export default function LandingPage() {
                 width={40}
                 height={40}
                 alt="Un Café con JJ Logo"
-                className="h-10 w-10 rounded-full"
+                className="h-8 w-8 sm:h-10 sm:w-10 rounded-full"
               />
-              <span className="text-lg font-bold text-white">Un Café con JJ</span>
+              <span className="text-base sm:text-lg font-bold text-white">Un Café con JJ</span>
             </div>
             <div className="flex items-center gap-4">
-              <Image src="/images/altavoz.png" width={120} height={40} alt="ALTAVOZ Logo" className="h-10" />
+              <Image src="/images/altavoz.png" width={120} height={40} alt="ALTAVOZ Logo" className="h-8 sm:h-10" />
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-[#e9b11a]">Kocodrilo Radio 94.5 FM</span>
-                <span className="text-sm font-bold text-[#e9b11a]">Café Radio 91.7 MHz</span>
+                <span className="text-xs sm:text-sm font-bold text-[#e9b11a]">Kocodrilo Radio 94.5 FM</span>
+                <span className="text-xs sm:text-sm font-bold text-[#e9b11a]">Café Radio 91.7 MHz</span>
               </div>
             </div>
             <div className="flex flex-col items-center md:items-end gap-1">
-              <p className="text-sm text-gray-400">
+              <p className="text-xs sm:text-sm text-gray-400 text-center md:text-right">
                 &copy; {new Date().getFullYear()} Un Café con JJ. Todos los derechos reservados.
               </p>
-              <p className="text-sm text-gray-400">
+              <p className="text-xs sm:text-sm text-gray-400 text-center md:text-right">
                 Desarrollado por{" "}
                 <a
                   href="https://dualitydomain.com"
