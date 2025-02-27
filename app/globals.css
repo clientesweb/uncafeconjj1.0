@@ -43,13 +43,3 @@ body {
   background-color: #1a1a2e !important;
 }
 
-/* Hide Twitter Timeline scrollbar */
-.twitter-dark-theme::-webkit-scrollbar {
-  display: none;
-}
-
-.twitter-dark-theme {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
