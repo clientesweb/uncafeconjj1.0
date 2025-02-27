@@ -30,10 +30,7 @@ export function YouTubeVideoCard({ video, isShort = false }: YouTubeVideoCardPro
         transition={{ duration: 0.5 }}
       >
         <button
-          onClick={() => {
-            if (isDialogOpen) return
-            window.open(`https://www.youtube.com/watch?v=${video.id}`, "_blank")
-          }}
+          onClick={() => setIsDialogOpen(true)}
           className="group block w-full text-left"
           aria-label={`Ver ${video.title}`}
         >
@@ -52,6 +49,23 @@ export function YouTubeVideoCard({ video, isShort = false }: YouTubeVideoCardPro
                 SHORT
               </div>
             )}
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="bg-[#e9b11a] rounded-full p-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#1a1a2e"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </div>
+            </div>
           </div>
           <h3 className="mt-2 line-clamp-2 text-sm font-medium text-white group-hover:text-[#e9b11a]">{video.title}</h3>
           <p className="text-xs text-gray-400">{timeAgo}</p>
