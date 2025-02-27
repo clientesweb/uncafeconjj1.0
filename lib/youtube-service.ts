@@ -30,18 +30,23 @@ export async function fetchPlaylistVideos(playlistId: string, apiKey: string, ma
       return []
     }
 
-    return data.items.map((item: any) => ({
-      id: item.snippet?.resourceId?.videoId || "",
-      title: item.snippet?.title || "Video sin título",
-      // Usar la miniatura de máxima calidad disponible
-      thumbnail:
-        item.snippet?.thumbnails?.maxres?.url ||
-        item.snippet?.thumbnails?.high?.url ||
-        item.snippet?.thumbnails?.medium?.url ||
-        item.snippet?.thumbnails?.default?.url ||
-        "/placeholder.svg?height=720&width=1280",
-      publishedAt: item.snippet?.publishedAt || new Date().toISOString(),
-    }))
+    return data.items.map((item: any) => {
+      // Extraer el ID del video
+      const videoId = item.snippet?.resourceId?.videoId || ""
+
+      // Construir URLs de miniaturas directamente usando el ID del video
+      // Esto garantiza que siempre tengamos una URL válida
+      const thumbnailUrl = videoId
+        ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+        : "/placeholder.svg?height=720&width=1280"
+
+      return {
+        id: videoId,
+        title: item.snippet?.title || "Video sin título",
+        thumbnail: thumbnailUrl,
+        publishedAt: item.snippet?.publishedAt || new Date().toISOString(),
+      }
+    })
   } catch (error) {
     console.error("Error fetching YouTube videos:", error)
     return []
