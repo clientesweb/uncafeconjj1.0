@@ -12,6 +12,7 @@ import { WhatsAppButton } from "./components/whatsapp-button"
 import { StructuredData } from "./components/structured-data"
 import { TopBanner } from "./components/top-banner"
 import { LiveStreamPlayer } from "./components/live-stream-player"
+import { YouTubeSubscribeBanner } from "./components/youtube-subscribe-banner"
 import { motion } from "framer-motion"
 
 export default function LandingPage() {
@@ -43,6 +44,7 @@ export default function LandingPage() {
 
   // ID del canal de YouTube de Un Café con JJ
   const channelId = "UCc4fHgV3zRgjHxYZJkQdxhw" // ID del canal de Un Café con JJ
+  const channelUrl = "https://youtube.com/@jimmyjairala?si=MdNCk5wxBTHMeLOF"
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-gradient-to-b from-[#0f0f1e] to-[#1a1a2e]">
@@ -383,6 +385,9 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* YouTube Subscribe Banner */}
+        <YouTubeSubscribeBanner channelUrl={channelUrl} />
+
         {/* YouTube Videos Section */}
         <section
           id="videos"
@@ -410,7 +415,11 @@ export default function LandingPage() {
               </div>
             </div>
           </motion.div>
-          <YouTubeVideosSection channelId={channelId} apiKey="AIzaSyBcNo4pMTbFhTs8RKujYFfNSo_HbIP9f7E" />
+          <YouTubeVideosSection
+            channelId={channelId}
+            apiKey="AIzaSyBcNo4pMTbFhTs8RKujYFfNSo_HbIP9f7E"
+            hideTitle={true}
+          />
         </section>
 
         {/* CTA Section */}
