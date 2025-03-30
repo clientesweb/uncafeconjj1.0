@@ -338,7 +338,10 @@ export default function LandingPage() {
                 className="inline-flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm px-4 py-2 text-sm font-medium text-white mb-6"
                 variants={fadeInUp}
               >
-                <span className="w-2 h-2 bg-[#e9b11a] rounded-full mr-2"></span>
+                <span className="relative flex h-2 w-2 mr-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e9b11a] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#e9b11a]"></span>
+                </span>
                 Transmisión en vivo de lunes a viernes
               </motion.div>
 
@@ -355,7 +358,7 @@ export default function LandingPage() {
                 profundidad y sin censura.
               </motion.p>
 
-              <motion.div className="flex flex-col gap-3 sm:flex-row mb-8" variants={fadeInUp}>
+              <motion.div className="flex flex-col sm:flex-row gap-4" variants={fadeInUp}>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
                     size="lg"
@@ -366,18 +369,19 @@ export default function LandingPage() {
                     VER EN VIVO
                   </Button>
                 </motion.div>
-              </motion.div>
 
-              {/* About program link */}
-              <motion.div className="mt-16" variants={fadeInUp}>
-                <Button
-                  variant="outline"
-                  className="text-white border-white/30 hover:bg-white/10 rounded-full group"
-                  onClick={() => scrollToSection("programa")}
-                >
-                  SOBRE EL PROGRAMA
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Button>
+                {/* About program link - Moved closer to VER EN VIVO button */}
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="h-12 text-white border-white/30 hover:bg-white/10 rounded-full group"
+                    onClick={() => scrollToSection("programa")}
+                  >
+                    SOBRE EL PROGRAMA
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </Button>
+                </motion.div>
               </motion.div>
             </motion.div>
           </motion.div>
