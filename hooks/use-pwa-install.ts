@@ -5,8 +5,17 @@ import { useState, useEffect } from "react"
 export function usePWAInstall() {
   const [installPrompt, setInstallPrompt] = useState<any>(null)
   const [isInstallable, setIsInstallable] = useState(false)
+  const [isIOS, setIsIOS] = useState(false)
 
   useEffect(() => {
+    // Check if the device is iOS
+    const checkIsIOS = () => {
+      const userAgent = window.navigator.userAgent.toLowerCase()
+      return /iphone|ipad|ipod/.test(userAgent)
+    }
+
+    setIsIOS(checkIsIOS())
+
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
       setInstallPrompt(e)
@@ -30,6 +39,6 @@ export function usePWAInstall() {
     setIsInstallable(false)
   }
 
-  return { isInstallable, install }
+  return { isInstallable, isIOS, install }
 }
 
