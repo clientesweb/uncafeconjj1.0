@@ -1,35 +1,108 @@
 "use client"
 
+import { useRef, useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { motion, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Facebook, Instagram, Youtube, Twitter, Clock, Calendar, Radio, Mic2, Play, ExternalLink } from "lucide-react"
+import {
+  Facebook,
+  Instagram,
+  Youtube,
+  Twitter,
+  Clock,
+  Calendar,
+  Radio,
+  Mic2,
+  Play,
+  ExternalLink,
+  ChevronDown,
+  ArrowRight,
+  Menu,
+} from "lucide-react"
 import { TikTok } from "./tiktok-icon"
 import { YouTubeVideosSection } from "./components/youtube-videos-section"
-import { MobileMenu } from "./components/mobile-menu"
 import { WhatsAppButton } from "./components/whatsapp-button"
 import { StructuredData } from "./components/structured-data"
 import { TopBanner } from "./components/top-banner"
 import { LiveStreamPlayer } from "./components/live-stream-player"
 import { YouTubeSubscribeBanner } from "./components/youtube-subscribe-banner"
-import { motion } from "framer-motion"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 
 export default function LandingPage() {
+  const [activeSection, setActiveSection] = useState("hero")
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const heroRef = useRef<HTMLDivElement>(null)
+  const liveRef = useRef<HTMLDivElement>(null)
+  const programRef = useRef<HTMLDivElement>(null)
+  const videosRef = useRef<HTMLDivElement>(null)
+  const contactRef = useRef<HTMLDivElement>(null)
+
+  // Parallax effect for hero section
+  const { scrollY } = useScroll()
+  const heroImageY = useTransform(scrollY, [0, 500], [0, 150])
+  const heroTextY = useTransform(scrollY, [0, 500], [0, -50])
+  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0])
+
+  // Channel info
+  const channelId = "UCc4fHgV3zRgjHxYZJkQdxhw"
+  const channelUrl = "https://youtube.com/@jimmyjairala?si=MdNCk5wxBTHMeLOF"
+
+  // Handle scroll to update active section
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 100
+
+      // Update header background
+      if (scrollPosition > 50) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+
+      // Update active section
+      const sections = [
+        { ref: heroRef, id: "hero" },
+        { ref: liveRef, id: "en-vivo" },
+        { ref: programRef, id: "programa" },
+        { ref: videosRef, id: "videos" },
+        { ref: contactRef, id: "contacto" },
+      ]
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const section = sections[i]
+        if (section.ref.current && section.ref.current.offsetTop <= scrollPosition) {
+          setActiveSection(section.id)
+          break
+        }
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+      const headerOffset = 80
+      const elementPosition = element.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      })
+      setIsMenuOpen(false)
     }
   }
 
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
+  // Animation variants
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
   }
 
   const staggerContainer = {
@@ -42,25 +115,116 @@ export default function LandingPage() {
     },
   }
 
-  // ID del canal de YouTube de Un Café con JJ
-  const channelId = "UCc4fHgV3zRgjHxYZJkQdxhw" // ID del canal de Un Café con JJ
-  const channelUrl = "https://youtube.com/@jimmyjairala?si=MdNCk5wxBTHMeLOF"
+  const navItems = [
+    { id: "en-vivo", label: "EN VIVO" },
+    { id: "programa", label: "PROGRAMA" },
+    { id: "videos", label: "VIDEOS" },
+    { id: "contacto", label: "CONTACTO" },
+  ]
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-gradient-to-b from-[#0f0f1e] to-[#1a1a2e]">
+    <div className="flex min-h-[100dvh] flex-col bg-[#0f0f1e]">
       <StructuredData />
       <TopBanner />
 
-      {/* Header */}
+      {/* Header - Modern Sticky with Glassmorphism */}
       <header
-        className="sticky top-0 z-50 w-full border-b border-[#e9b11a]/10 bg-[#0f0f1e]/95 backdrop-blur supports-[backdrop-filter]:bg-[#0f0f1e]/60"
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+          isScrolled ? "bg-[#0f0f1e]/80 backdrop-blur-md border-b border-[#e9b11a]/10" : "bg-transparent"
+        }`}
         role="banner"
       >
-        <div className="container flex h-16 items-center justify-between">
+        <div className="container flex h-20 items-center justify-between">
           <div className="flex items-center gap-2">
-            <MobileMenu />
+            {/* Mobile Menu */}
+            <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="md:hidden text-white">
+                  <Menu className="h-6 w-6" />
+                  <span className="sr-only">Abrir menú</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="left"
+                className="w-[300px] bg-gradient-to-b from-[#0f0f1e] to-[#1a1a2e] border-[#e9b11a]/10"
+              >
+                <div className="flex items-center gap-3 mt-4 mb-8">
+                  <div className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-[#e9b11a] p-0.5">
+                    <Image
+                      src="/images/logo.png"
+                      width={40}
+                      height={40}
+                      alt="Un Café con JJ Logo"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <span className="text-lg font-bold text-white">
+                    Un Café con <span className="text-[#e9b11a]">JJ</span>
+                  </span>
+                </div>
+                <nav className="flex flex-col gap-6 mt-8">
+                  {navItems.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => scrollToSection(item.id)}
+                      className={`text-lg font-medium transition-colors relative group ${
+                        activeSection === item.id ? "text-[#e9b11a]" : "text-white hover:text-[#e9b11a]"
+                      }`}
+                    >
+                      {item.label}
+                      <span
+                        className={`absolute -bottom-1 left-0 h-0.5 bg-[#e9b11a] transition-all duration-300 ${
+                          activeSection === item.id ? "w-1/4" : "w-0 group-hover:w-1/4"
+                        }`}
+                      ></span>
+                    </button>
+                  ))}
+                  <Button
+                    className="mt-6 bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 rounded-full"
+                    onClick={() => scrollToSection("en-vivo")}
+                  >
+                    <Play className="mr-2 h-4 w-4" />
+                    ESCÚCHANOS EN VIVO
+                  </Button>
+                </nav>
+                <div className="absolute bottom-8 left-6 right-6">
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-4">
+                      <Link
+                        href="https://facebook.com/uncafeconjj"
+                        className="text-white hover:text-[#e9b11a] transition-colors"
+                        aria-label="Facebook"
+                      >
+                        <Facebook className="h-5 w-5" />
+                      </Link>
+                      <Link
+                        href="https://instagram.com/uncafeconjj"
+                        className="text-white hover:text-[#e9b11a] transition-colors"
+                        aria-label="Instagram"
+                      >
+                        <Instagram className="h-5 w-5" />
+                      </Link>
+                      <Link
+                        href="https://youtube.com/uncafeconjj"
+                        className="text-white hover:text-[#e9b11a] transition-colors"
+                        aria-label="YouTube"
+                      >
+                        <Youtube className="h-5 w-5" />
+                      </Link>
+                    </div>
+                    <p className="text-xs text-gray-400">@UnCafeConJJ</p>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            {/* Logo */}
             <Link href="/" className="flex items-center gap-3" aria-label="Un Café con JJ - Inicio">
-              <div className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-[#e9b11a] p-0.5">
+              <motion.div
+                className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-[#e9b11a] p-0.5"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Image
                   src="/images/logo.png"
                   width={48}
@@ -70,60 +234,57 @@ export default function LandingPage() {
                   priority
                   quality={90}
                 />
-              </div>
+              </motion.div>
               <span className="text-xl font-bold text-white">
                 Un Café con <span className="text-[#e9b11a]">JJ</span>
               </span>
             </Link>
           </div>
 
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex gap-8" role="navigation" aria-label="Navegación principal">
-            <button
-              onClick={() => scrollToSection("en-vivo")}
-              className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] relative group"
-            >
-              EN VIVO
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e9b11a] transition-all duration-300 group-hover:w-full"></span>
-            </button>
-            <button
-              onClick={() => scrollToSection("programa")}
-              className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] relative group"
-            >
-              PROGRAMA
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e9b11a] transition-all duration-300 group-hover:w-full"></span>
-            </button>
-            <button
-              onClick={() => scrollToSection("videos")}
-              className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] relative group"
-            >
-              VIDEOS
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e9b11a] transition-all duration-300 group-hover:w-full"></span>
-            </button>
-            <button
-              onClick={() => scrollToSection("contacto")}
-              className="text-sm font-medium text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] relative group"
-            >
-              CONTACTO
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#e9b11a] transition-all duration-300 group-hover:w-full"></span>
-            </button>
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`text-sm font-medium transition-colors relative group ${
+                  activeSection === item.id ? "text-[#e9b11a]" : "text-white hover:text-[#e9b11a]"
+                }`}
+              >
+                {item.label}
+                <span
+                  className={`absolute -bottom-1 left-0 h-0.5 bg-[#e9b11a] transition-all duration-300 ${
+                    activeSection === item.id ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                ></span>
+              </button>
+            ))}
           </nav>
 
+          {/* CTA Button */}
           <div className="hidden md:flex gap-4">
-            <Button
-              className="bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e] rounded-full"
-              onClick={() => scrollToSection("en-vivo")}
-            >
-              <Play className="mr-2 h-4 w-4" />
-              ESCÚCHANOS EN VIVO
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                className="bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 rounded-full"
+                onClick={() => scrollToSection("en-vivo")}
+              >
+                <Play className="mr-2 h-4 w-4" />
+                ESCÚCHANOS EN VIVO
+              </Button>
+            </motion.div>
           </div>
         </div>
       </header>
 
       <main id="main-content" className="flex-1" role="main">
-        {/* Hero Section with optimized image */}
-        <section className="w-full border-b border-[#e9b11a]/10" aria-labelledby="hero-title">
-          <div className="relative w-full h-[calc(100vh-4rem)] min-h-[600px]">
+        {/* Hero Section - Modern with Parallax */}
+        <section
+          id="hero"
+          ref={heroRef}
+          className="relative w-full min-h-[100vh] flex items-center justify-center overflow-hidden"
+          aria-labelledby="hero-title"
+        >
+          <motion.div className="absolute inset-0 z-0" style={{ y: heroImageY }}>
             <Image
               src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/FACEBOOK%20COVER%202025%20%281%29.png-VEqDybN3naytfynNcGkvNKgl6cbXqP.jpeg"
               alt="Jimmy Jairala presentando Un Café con JJ"
@@ -138,376 +299,554 @@ export default function LandingPage() {
               placeholder="blur"
               blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQrJyEwPDY2ODYyTEhMR0BGRlNCRkJHYGFjYWM4OTtBV0VGUElGYWZYZFD/2wBDARUXFyAeIBogHh4gIiAyRzJHMkZGR0dGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkb/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[#0f0f1e]">
-              <motion.div
-                className="container h-full flex items-center px-4 md:px-6"
-                initial="hidden"
-                animate="visible"
-                variants={staggerContainer}
+          </motion.div>
+
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[#0f0f1e] z-10"></div>
+
+          {/* Hero Content */}
+          <motion.div
+            className="container relative z-20 px-4 md:px-6 flex flex-col items-start"
+            style={{ y: heroTextY, opacity: heroOpacity }}
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <motion.div className="max-w-[600px]" variants={fadeInUp}>
+              <motion.h1
+                id="hero-title"
+                className="text-5xl font-bold tracking-tighter text-white sm:text-6xl xl:text-7xl/none mb-4"
+                variants={fadeInUp}
               >
-                <div className="max-w-[600px]">
-                  <motion.h1
-                    id="hero-title"
-                    className="text-4xl font-bold tracking-tighter text-white sm:text-5xl xl:text-6xl/none mb-4"
-                    variants={fadeIn}
+                Un Café con <span className="text-[#e9b11a]">JJ</span>
+              </motion.h1>
+              <motion.p className="text-[#e9b11a] md:text-xl mb-2 font-semibold" variants={fadeInUp}>
+                TRINCHERA DEL PENSAMIENTO LIBRE
+              </motion.p>
+              <motion.p className="text-gray-200 md:text-xl mb-8" variants={fadeInUp}>
+                Noticias, análisis y opinión con Jimmy Jairala.
+              </motion.p>
+              <motion.div className="flex flex-col gap-3 sm:flex-row mb-8" variants={fadeInUp}>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    size="lg"
+                    className="h-12 bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 rounded-full"
+                    onClick={() => scrollToSection("en-vivo")}
                   >
-                    Un Café con <span className="text-[#e9b11a]">JJ</span>
-                  </motion.h1>
-                  <motion.p className="text-[#e9b11a] md:text-xl mb-2 font-semibold" variants={fadeIn}>
-                    TRINCHERA DEL PENSAMIENTO LIBRE
-                  </motion.p>
-                  <motion.p className="text-gray-200 md:text-xl mb-8" variants={fadeIn}>
-                    Noticias, análisis y opinión con Jimmy Jairala.
-                  </motion.p>
-                  <motion.div className="flex flex-col gap-3 sm:flex-row mb-8" variants={fadeIn}>
-                    <Button
-                      size="lg"
-                      className="h-12 bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e] rounded-full"
-                      onClick={() => scrollToSection("en-vivo")}
-                    >
-                      <Play className="mr-2 h-5 w-5" />
-                      VER EN VIVO
-                    </Button>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="h-12 text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e] rounded-full"
-                      onClick={() => scrollToSection("programa")}
-                    >
-                      PROGRAMACIÓN
-                    </Button>
-                  </motion.div>
-                  <motion.div
-                    className="flex flex-wrap gap-5"
-                    role="list"
-                    aria-label="Redes sociales"
-                    variants={fadeIn}
+                    <Play className="mr-2 h-5 w-5" />
+                    VER EN VIVO
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="h-12 text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 rounded-full"
+                    onClick={() => scrollToSection("programa")}
                   >
-                    <Link
-                      href="https://facebook.com/uncafeconjj"
-                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-2 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] backdrop-blur-sm"
-                      aria-label="Síguenos en Facebook"
-                    >
-                      <Facebook className="h-5 w-5" aria-hidden="true" />
-                    </Link>
-                    <Link
-                      href="https://instagram.com/uncafeconjj"
-                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-2 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] backdrop-blur-sm"
-                      aria-label="Síguenos en Instagram"
-                    >
-                      <Instagram className="h-5 w-5" aria-hidden="true" />
-                    </Link>
-                    <Link
-                      href="https://youtube.com/uncafeconjj"
-                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-2 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] backdrop-blur-sm"
-                      aria-label="Síguenos en YouTube"
-                    >
-                      <Youtube className="h-5 w-5" aria-hidden="true" />
-                    </Link>
-                    <Link
-                      href="https://twitter.com/uncafeconjj"
-                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-2 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] backdrop-blur-sm"
-                      aria-label="Síguenos en Twitter"
-                    >
-                      <Twitter className="h-5 w-5" aria-hidden="true" />
-                    </Link>
-                    <Link
-                      href="#"
-                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-2 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] backdrop-blur-sm"
-                      aria-label="Síguenos en TikTok"
-                    >
-                      <TikTok className="h-5 w-5" aria-hidden="true" />
-                    </Link>
-                  </motion.div>
-                </div>
+                    PROGRAMACIÓN
+                  </Button>
+                </motion.div>
               </motion.div>
-            </div>
-          </div>
+              <motion.div className="flex flex-wrap gap-5" role="list" aria-label="Redes sociales" variants={fadeInUp}>
+                {[
+                  { icon: Facebook, href: "https://facebook.com/uncafeconjj", label: "Facebook" },
+                  { icon: Instagram, href: "https://instagram.com/uncafeconjj", label: "Instagram" },
+                  { icon: Youtube, href: "https://youtube.com/uncafeconjj", label: "YouTube" },
+                  { icon: Twitter, href: "https://twitter.com/uncafeconjj", label: "Twitter" },
+                  { icon: TikTok, href: "#", label: "TikTok" },
+                ].map((social, index) => (
+                  <motion.div
+                    key={social.label}
+                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <Link
+                      href={social.href}
+                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-2 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] backdrop-blur-sm"
+                      aria-label={`Síguenos en ${social.label}`}
+                    >
+                      <social.icon className="h-5 w-5" aria-hidden="true" />
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+
+            {/* Scroll indicator */}
+            <motion.div
+              className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
+            >
+              <p className="text-[#e9b11a] text-sm mb-2">Descubre más</p>
+              <ChevronDown className="h-6 w-6 text-[#e9b11a]" />
+            </motion.div>
+          </motion.div>
         </section>
 
-        {/* Live Stream Section */}
-        <section id="en-vivo" className="w-full py-16 md:py-24 lg:py-32" aria-labelledby="live-title">
-          <div className="container px-4 md:px-6">
+        {/* Live Stream Section - Modern with Floating Elements */}
+        <section
+          id="en-vivo"
+          ref={liveRef}
+          className="w-full py-20 md:py-28 relative overflow-hidden"
+          aria-labelledby="live-title"
+        >
+          {/* Background Elements */}
+          <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+            <motion.div
+              className="absolute top-20 left-10 w-64 h-64 rounded-full bg-[#e9b11a]/5 blur-3xl"
+              animate={{
+                x: [0, 50, 0],
+                y: [0, 30, 0],
+              }}
+              transition={{ repeat: Number.POSITIVE_INFINITY, duration: 15, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute bottom-40 right-20 w-80 h-80 rounded-full bg-[#e9b11a]/10 blur-3xl"
+              animate={{
+                x: [0, -30, 0],
+                y: [0, 50, 0],
+              }}
+              transition={{ repeat: Number.POSITIVE_INFINITY, duration: 20, ease: "easeInOut" }}
+            />
+          </div>
+
+          <div className="container px-4 md:px-6 relative z-10">
             <motion.div
               className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="inline-flex items-center justify-center rounded-full bg-[#e9b11a]/10 px-3 py-1 text-sm font-medium text-[#e9b11a] mb-2">
+              <motion.div
+                className="inline-flex items-center justify-center rounded-full bg-[#e9b11a]/10 px-3 py-1 text-sm font-medium text-[#e9b11a] mb-2"
+                whileHover={{ scale: 1.05 }}
+              >
                 <span className="relative flex h-2 w-2 mr-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e9b11a] opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#e9b11a]"></span>
                 </span>
                 EN DIRECTO
-              </div>
+              </motion.div>
               <div className="space-y-2">
-                <h2 id="live-title" className="text-3xl font-bold tracking-tighter text-white md:text-4xl/tight">
+                <motion.h2
+                  id="live-title"
+                  className="text-4xl font-bold tracking-tighter text-white md:text-5xl/tight"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
                   TRANSMISIÓN EN VIVO
-                </h2>
-                <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl">
+                </motion.h2>
+                <motion.p
+                  className="mx-auto max-w-[700px] text-gray-400 md:text-xl"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
                   Sintoniza nuestro programa en directo de lunes a viernes de 6:00 a 8:00 a.m.
-                </p>
+                </motion.p>
               </div>
             </motion.div>
             <motion.div
               className="mx-auto w-full max-w-5xl"
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
             >
               <LiveStreamPlayer streamUrl="https://player.castr.com/d_8aea6c10d99811efb5ebf7655896c5a7" />
               <div className="mt-6 flex flex-wrap justify-center gap-4">
-                <Button
-                  variant="outline"
-                  className="text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 rounded-full"
-                  onClick={() => window.open("https://www.youtube.com/uncafeconjj", "_blank")}
-                >
-                  <Youtube className="mr-2 h-4 w-4" />
-                  Ver en YouTube
-                </Button>
-                <Button
-                  variant="outline"
-                  className="text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 rounded-full"
-                  onClick={() => window.open("https://www.facebook.com/uncafeconjj", "_blank")}
-                >
-                  <Facebook className="mr-2 h-4 w-4" />
-                  Ver en Facebook
-                </Button>
+                {[
+                  { icon: Youtube, label: "Ver en YouTube", url: "https://www.youtube.com/uncafeconjj" },
+                  { icon: Facebook, label: "Ver en Facebook", url: "https://www.facebook.com/uncafeconjj" },
+                ].map((platform) => (
+                  <motion.div key={platform.label} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      variant="outline"
+                      className="text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 rounded-full"
+                      onClick={() => window.open(platform.url, "_blank")}
+                    >
+                      <platform.icon className="mr-2 h-4 w-4" />
+                      {platform.label}
+                    </Button>
+                  </motion.div>
+                ))}
               </div>
             </motion.div>
           </div>
         </section>
 
-        {/* Program Info Section */}
+        {/* Program Info Section - Modern with Cards */}
         <section
           id="programa"
-          className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b from-[#0f0f1e] to-[#111122]"
+          ref={programRef}
+          className="w-full py-20 md:py-28 bg-gradient-to-b from-[#0f0f1e] to-[#111122] relative overflow-hidden"
           aria-labelledby="program-title"
         >
-          <div className="container px-4 md:px-6">
+          {/* Background Elements */}
+          <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#e9b11a]/5 to-transparent opacity-50 pointer-events-none" />
+
+          <div className="container px-4 md:px-6 relative z-10">
             <motion.div
-              className="flex flex-col items-center justify-center space-y-4 text-center mb-12"
-              initial={{ opacity: 0, y: 20 }}
+              className="flex flex-col items-center justify-center space-y-4 text-center mb-16"
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <div className="inline-flex items-center justify-center rounded-full bg-[#e9b11a]/10 px-3 py-1 text-sm font-medium text-[#e9b11a] mb-2">
+              <motion.div
+                className="inline-flex items-center justify-center rounded-full bg-[#e9b11a]/10 px-3 py-1 text-sm font-medium text-[#e9b11a] mb-2"
+                whileHover={{ scale: 1.05 }}
+              >
                 INFORMACIÓN
-              </div>
+              </motion.div>
               <div className="space-y-2">
-                <h2 id="program-title" className="text-3xl font-bold tracking-tighter text-white md:text-4xl/tight">
+                <motion.h2
+                  id="program-title"
+                  className="text-4xl font-bold tracking-tighter text-white md:text-5xl/tight"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
                   SOBRE EL PROGRAMA
-                </h2>
-                <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl">
+                </motion.h2>
+                <motion.p
+                  className="mx-auto max-w-[700px] text-gray-400 md:text-xl"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
                   Un espacio de análisis, opinión y debate sobre la actualidad nacional e internacional.
-                </p>
+                </motion.p>
               </div>
             </motion.div>
-            <div className="mx-auto grid max-w-5xl items-center gap-8 py-12 lg:grid-cols-2 lg:gap-16">
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+              {/* Left Column - Host Info */}
               <motion.div
-                className="flex flex-col justify-center space-y-6"
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.8 }}
+                className="flex flex-col gap-8"
               >
-                <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-white">Nuestro Presentador</h3>
-                  <div className="flex flex-col gap-6">
-                    <div className="flex items-start gap-5">
-                      <div className="rounded-full bg-[#e9b11a]/20 p-3">
-                        <Mic2 className="h-6 w-6 text-[#e9b11a]" />
+                <div className="relative">
+                  <div className="absolute -top-10 -left-10 w-20 h-20 bg-[#e9b11a]/20 rounded-full blur-xl" />
+                  <div className="relative z-10">
+                    <h3 className="text-3xl font-bold text-white mb-6">Nuestro Presentador</h3>
+                    <div className="flex items-start gap-6 bg-[#1a1a2e]/50 backdrop-blur-sm p-6 rounded-2xl border border-[#e9b11a]/10">
+                      <div className="rounded-full bg-[#e9b11a]/20 p-4 shrink-0">
+                        <Mic2 className="h-8 w-8 text-[#e9b11a]" />
                       </div>
                       <div>
-                        <h4 className="text-xl font-bold text-[#e9b11a]">Jimmy Jairala</h4>
-                        <p className="text-gray-400 mt-2">
+                        <h4 className="text-2xl font-bold text-[#e9b11a]">Jimmy Jairala</h4>
+                        <p className="text-gray-300 mt-3 leading-relaxed">
                           Periodista y analista político con amplia experiencia en medios de comunicación y una visión
-                          crítica de la realidad nacional e internacional.
+                          crítica de la realidad nacional e internacional. Conductor de Un Café con JJ, un espacio para
+                          el análisis profundo y el debate constructivo.
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
+
+                <motion.div
+                  className="mt-6 flex flex-col gap-4"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                >
+                  <Button
+                    className="bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 rounded-full flex items-center justify-center w-full md:w-auto"
+                    onClick={() => scrollToSection("en-vivo")}
+                  >
+                    <Play className="mr-2 h-4 w-4" />
+                    ESCUCHAR AHORA
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </motion.div>
               </motion.div>
+
+              {/* Right Column - Program Details */}
               <motion.div
-                className="grid gap-6"
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: 50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.8 }}
+                className="grid gap-6"
               >
-                <Card className="bg-[#1a1a2e]/50 border-[#e9b11a]/10 backdrop-blur-sm overflow-hidden">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-5">
-                      <div className="rounded-full bg-[#e9b11a]/20 p-3">
-                        <Calendar className="h-6 w-6 text-[#e9b11a]" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-white">Días de Emisión</h4>
-                        <p className="text-gray-400 mt-2">Lunes a Viernes</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="bg-[#1a1a2e]/50 border-[#e9b11a]/10 backdrop-blur-sm overflow-hidden">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-5">
-                      <div className="rounded-full bg-[#e9b11a]/20 p-3">
-                        <Clock className="h-6 w-6 text-[#e9b11a]" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-white">Horario</h4>
-                        <p className="text-gray-400 mt-2">6:00 a 8:00 a.m.</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                <Card className="bg-[#1a1a2e]/50 border-[#e9b11a]/10 backdrop-blur-sm overflow-hidden">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-5">
-                      <div className="rounded-full bg-[#e9b11a]/20 p-3">
-                        <Radio className="h-6 w-6 text-[#e9b11a]" />
-                      </div>
-                      <div>
-                        <h4 className="text-xl font-bold text-white">Sintoniza</h4>
-                        <p className="text-gray-400 mt-2">Kocodrilo Radio 94.5 FM</p>
-                        <p className="text-gray-400">Café Radio 91.7 MHz</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                {[
+                  {
+                    icon: Calendar,
+                    title: "Días de Emisión",
+                    content: "Lunes a Viernes",
+                    delay: 0.1,
+                  },
+                  {
+                    icon: Clock,
+                    title: "Horario",
+                    content: "6:00 a 8:00 a.m.",
+                    delay: 0.2,
+                  },
+                  {
+                    icon: Radio,
+                    title: "Sintoniza",
+                    content: "Kocodrilo Radio 94.5 FM\nCafé Radio 91.7 MHz",
+                    delay: 0.3,
+                  },
+                ].map((item, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: item.delay }}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <Card className="bg-gradient-to-br from-[#1a1a2e]/80 to-[#1a1a2e]/50 border-[#e9b11a]/10 backdrop-blur-sm overflow-hidden shadow-lg shadow-black/20 hover:shadow-[#e9b11a]/5">
+                      <CardContent className="p-6">
+                        <div className="flex items-start gap-5">
+                          <div className="rounded-full bg-[#e9b11a]/20 p-4">
+                            <item.icon className="h-7 w-7 text-[#e9b11a]" />
+                          </div>
+                          <div>
+                            <h4 className="text-xl font-bold text-white">{item.title}</h4>
+                            {item.content.split("\n").map((line, i) => (
+                              <p key={i} className="text-gray-300 mt-2">
+                                {line}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* YouTube Subscribe Banner */}
-        <YouTubeSubscribeBanner channelUrl={channelUrl} />
+        {/* YouTube Subscribe Banner - Modern with Animation */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <YouTubeSubscribeBanner channelUrl={channelUrl} />
+        </motion.div>
 
-        {/* YouTube Videos Section */}
+        {/* YouTube Videos Section - Modern with Tabs */}
         <section
           id="videos"
-          className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b from-[#111122] to-[#0f0f1e]"
+          ref={videosRef}
+          className="w-full py-20 md:py-28 bg-gradient-to-b from-[#111122] to-[#0f0f1e] relative overflow-hidden"
           aria-labelledby="videos-title"
         >
+          {/* Background Elements */}
+          <div className="absolute top-1/4 left-0 w-full h-1/2 bg-[#e9b11a]/5 skew-y-6 -z-10" />
+
+          <div className="container px-4 md:px-6 relative z-10">
+            <motion.div
+              className="flex flex-col items-center justify-center space-y-4 text-center mb-16"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <motion.div
+                className="inline-flex items-center justify-center rounded-full bg-[#e9b11a]/10 px-3 py-1 text-sm font-medium text-[#e9b11a] mb-2"
+                whileHover={{ scale: 1.05 }}
+              >
+                MULTIMEDIA
+              </motion.div>
+              <div className="space-y-2">
+                <motion.h2
+                  id="videos-title"
+                  className="text-4xl font-bold tracking-tighter text-white md:text-5xl/tight"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
+                  NUESTROS VIDEOS
+                </motion.h2>
+                <motion.p
+                  className="mx-auto max-w-[700px] text-gray-400 md:text-xl"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  Mira los últimos episodios y momentos destacados de Un Café con JJ.
+                </motion.p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              <YouTubeVideosSection
+                channelId={channelId}
+                apiKey="AIzaSyBcNo4pMTbFhTs8RKujYFfNSo_HbIP9f7E"
+                hideTitle={true}
+              />
+            </motion.div>
+          </div>
+        </section>
+
+        {/* CTA Section - Modern with Gradient */}
+        <section
+          id="contacto"
+          ref={contactRef}
+          className="w-full py-20 md:py-28 bg-gradient-to-b from-[#0f0f1e] to-[#111122] relative overflow-hidden"
+          aria-labelledby="contact-title"
+        >
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-5 mix-blend-overlay pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#0f0f1e] to-transparent pointer-events-none" />
+
+          <div className="container px-4 md:px-6 relative z-10">
+            <motion.div
+              className="flex flex-col items-center justify-center space-y-6 text-center"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <motion.div
+                className="inline-flex items-center justify-center rounded-full bg-[#e9b11a]/10 px-3 py-1 text-sm font-medium text-[#e9b11a] mb-2"
+                whileHover={{ scale: 1.05 }}
+              >
+                COMUNIDAD
+              </motion.div>
+              <div className="space-y-2">
+                <motion.h2
+                  id="contact-title"
+                  className="text-4xl font-bold tracking-tighter text-white md:text-5xl/tight"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
+                  SÍGUENOS EN REDES SOCIALES
+                </motion.h2>
+                <motion.p
+                  className="mx-auto max-w-[700px] text-gray-400 md:text-xl"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  Mantente informado y participa en nuestras conversaciones.
+                </motion.p>
+              </div>
+
+              <motion.div
+                className="flex gap-6 pt-8"
+                role="list"
+                aria-label="Redes sociales"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                {[
+                  { icon: Facebook, href: "https://facebook.com/uncafeconjj", label: "Facebook", color: "bg-blue-600" },
+                  {
+                    icon: Instagram,
+                    href: "https://instagram.com/uncafeconjj",
+                    label: "Instagram",
+                    color: "bg-pink-600",
+                  },
+                  { icon: Youtube, href: "https://youtube.com/uncafeconjj", label: "YouTube", color: "bg-red-600" },
+                  { icon: Twitter, href: "https://twitter.com/uncafeconjj", label: "Twitter", color: "bg-blue-400" },
+                  { icon: TikTok, href: "#", label: "TikTok", color: "bg-black" },
+                ].map((social, index) => (
+                  <motion.div
+                    key={social.label}
+                    whileHover={{
+                      scale: 1.2,
+                      rotate: 5,
+                      boxShadow: "0 0 15px rgba(233, 177, 26, 0.5)",
+                    }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <Link
+                      href={social.href}
+                      className={`flex items-center justify-center h-14 w-14 text-white rounded-full p-3 bg-[#1a1a2e] hover:bg-[#e9b11a] hover:text-[#1a1a2e] transition-all duration-300 shadow-lg`}
+                      aria-label={`Síguenos en ${social.label}`}
+                    >
+                      <social.icon className="h-7 w-7" aria-hidden="true" />
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              <motion.div
+                className="pt-6"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+              >
+                <p className="text-gray-400">@UnCafeConJJ - @jimmyjairala</p>
+              </motion.div>
+
+              <motion.div
+                className="mt-10"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Button
+                  className="bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 rounded-full px-8 py-6 text-lg"
+                  onClick={() => window.open("https://wa.me/593992282860", "_blank")}
+                >
+                  <ExternalLink className="mr-2 h-5 w-5" />
+                  CONTÁCTANOS
+                </Button>
+              </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        <WhatsAppButton />
+      </main>
+
+      {/* Footer - Modern with Animation */}
+      <footer className="w-full border-t border-[#e9b11a]/10 bg-[#0f0f1e]" role="contentinfo">
+        <div className="container flex flex-col gap-8 py-12 px-4 md:px-6">
           <motion.div
-            className="container px-4 md:px-6 mb-12"
+            className="flex flex-col md:flex-row justify-between items-center gap-6"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="inline-flex items-center justify-center rounded-full bg-[#e9b11a]/10 px-3 py-1 text-sm font-medium text-[#e9b11a] mb-2">
-                MULTIMEDIA
-              </div>
-              <div className="space-y-2">
-                <h2 id="videos-title" className="text-3xl font-bold tracking-tighter text-white md:text-4xl/tight">
-                  NUESTROS VIDEOS
-                </h2>
-                <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl">
-                  Mira los últimos episodios y momentos destacados de Un Café con JJ.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-          <YouTubeVideosSection
-            channelId={channelId}
-            apiKey="AIzaSyBcNo4pMTbFhTs8RKujYFfNSo_HbIP9f7E"
-            hideTitle={true}
-          />
-        </section>
-
-        {/* CTA Section */}
-        <section
-          id="contacto"
-          className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b from-[#0f0f1e] to-[#111122]"
-          aria-labelledby="contact-title"
-        >
-          <div className="container px-4 md:px-6">
-            <motion.div
-              className="flex flex-col items-center justify-center space-y-6 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="inline-flex items-center justify-center rounded-full bg-[#e9b11a]/10 px-3 py-1 text-sm font-medium text-[#e9b11a] mb-2">
-                COMUNIDAD
-              </div>
-              <div className="space-y-2">
-                <h2 id="contact-title" className="text-3xl font-bold tracking-tighter text-white md:text-4xl/tight">
-                  SÍGUENOS EN REDES SOCIALES
-                </h2>
-                <p className="mx-auto max-w-[700px] text-gray-400 md:text-xl">
-                  Mantente informado y participa en nuestras conversaciones.
-                </p>
-              </div>
-              <div className="flex gap-6 pt-6" role="list" aria-label="Redes sociales">
-                <Link
-                  href="https://facebook.com/uncafeconjj"
-                  className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-3 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] transition-all duration-300 transform hover:scale-110"
-                  aria-label="Síguenos en Facebook"
-                >
-                  <Facebook className="h-7 w-7" aria-hidden="true" />
-                </Link>
-                <Link
-                  href="https://instagram.com/uncafeconjj"
-                  className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-3 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] transition-all duration-300 transform hover:scale-110"
-                  aria-label="Síguenos en Instagram"
-                >
-                  <Instagram className="h-7 w-7" aria-hidden="true" />
-                </Link>
-                <Link
-                  href="https://youtube.com/uncafeconjj"
-                  className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-3 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] transition-all duration-300 transform hover:scale-110"
-                  aria-label="Síguenos en YouTube"
-                >
-                  <Youtube className="h-7 w-7" aria-hidden="true" />
-                </Link>
-                <Link
-                  href="https://twitter.com/uncafeconjj"
-                  className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-3 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] transition-all duration-300 transform hover:scale-110"
-                  aria-label="Síguenos en Twitter"
-                >
-                  <Twitter className="h-7 w-7" aria-hidden="true" />
-                </Link>
-                <Link
-                  href="#"
-                  className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-3 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] transition-all duration-300 transform hover:scale-110"
-                  aria-label="Síguenos en TikTok"
-                >
-                  <TikTok className="h-7 w-7" aria-hidden="true" />
-                </Link>
-              </div>
-              <div className="pt-6">
-                <p className="text-gray-400">@UnCafeConJJ - @jimmyjairala</p>
-              </div>
-              <div className="mt-8">
-                <Button
-                  className="bg-[#e9b11a] text-[#1a1a2e] hover:bg-[#e9b11a]/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1a2e] rounded-full"
-                  onClick={() => window.open("https://wa.me/593992282860", "_blank")}
-                >
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  CONTÁCTANOS
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-        <WhatsAppButton />
-      </main>
-
-      {/* Footer */}
-      <footer className="w-full border-t border-[#e9b11a]/10 bg-[#0f0f1e]" role="contentinfo">
-        <div className="container flex flex-col gap-8 py-12 px-4 md:px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="flex items-center gap-3">
-              <div className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-[#e9b11a] p-0.5">
+              <motion.div
+                className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-[#e9b11a] p-0.5"
+                whileHover={{ scale: 1.1, rotate: 10 }}
+                whileTap={{ scale: 0.9 }}
+              >
                 <Image
                   src="/images/logo.png"
                   width={48}
@@ -516,7 +855,7 @@ export default function LandingPage() {
                   className="h-full w-full object-cover"
                   quality={90}
                 />
-              </div>
+              </motion.div>
               <span className="text-xl font-bold text-white">
                 Un Café con <span className="text-[#e9b11a]">JJ</span>
               </span>
@@ -551,7 +890,7 @@ export default function LandingPage() {
                 </a>
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </footer>
     </div>
