@@ -42,7 +42,7 @@ export default function LandingPage() {
   }
 
   // ID del canal de YouTube de Un Café con JJ
-  const channelId = "UCXqGrJVBSYdnXJGTFxBYK-A" // Reemplazar con el ID real del canal
+  const channelId = "UCc4fHgV3zRgjHxYZJkQdxhw" // ID del canal de Un Café con JJ
 
   return (
     <div className="flex min-h-[100dvh] flex-col bg-gradient-to-b from-[#0f0f1e] to-[#1a1a2e]">
