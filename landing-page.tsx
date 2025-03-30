@@ -41,6 +41,9 @@ export default function LandingPage() {
     },
   }
 
+  // ID del canal de YouTube de Un Café con JJ
+  const channelId = "UCXqGrJVBSYdnXJGTFxBYK-A" // Reemplazar con el ID real del canal
+
   return (
     <div className="flex min-h-[100dvh] flex-col bg-gradient-to-b from-[#0f0f1e] to-[#1a1a2e]">
       <StructuredData />
@@ -407,11 +410,7 @@ export default function LandingPage() {
               </div>
             </div>
           </motion.div>
-          <YouTubeVideosSection
-            regularPlaylistId="PLSwBXxeopk-xySzecvVbfGTqnCTi8QhtE"
-            shortsPlaylistId="PLSwBXxeopk-xUhmNW4jOBi8Olkr_4p2Rc"
-            apiKey="AIzaSyBcNo4pMTbFhTs8RKujYFfNSo_HbIP9f7E"
-          />
+          <YouTubeVideosSection channelId={channelId} apiKey="AIzaSyBcNo4pMTbFhTs8RKujYFfNSo_HbIP9f7E" />
         </section>
 
         {/* CTA Section */}
