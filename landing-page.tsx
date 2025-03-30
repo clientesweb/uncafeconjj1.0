@@ -702,7 +702,7 @@ export default function LandingPage() {
             >
               <YouTubeVideosSection
                 channelId={channelId}
-                apiKey="AIzaSyBcNo4pMTbFhTs8RKujYFfNSo_HbIP9f7E"
+                apiKey="AIzaSyDm96WQoeg4AfeyYwjmXfn76eGDV8b_OOc"
                 hideTitle={true}
               />
             </motion.div>
