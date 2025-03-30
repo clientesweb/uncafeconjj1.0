@@ -1,25 +1,19 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { fetchPlaylistVideos, type YouTubeVideo } from "@/lib/youtube-service"
+import { fetchChannelVideos, type YouTubeVideo } from "@/lib/youtube-service"
 import { YouTubeVideoCard } from "./youtube-video-card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { RefreshCw } from "lucide-react"
 
 interface YouTubeVideosSectionProps {
-  regularPlaylistId: string
-  shortsPlaylistId: string
+  channelId: string
   apiKey: string
   hideTitle?: boolean
 }
 
-export function YouTubeVideosSection({
-  regularPlaylistId,
-  shortsPlaylistId,
-  apiKey,
-  hideTitle = false,
-}: YouTubeVideosSectionProps) {
+export function YouTubeVideosSection({ channelId, apiKey, hideTitle = false }: YouTubeVideosSectionProps) {
   const [regularVideos, setRegularVideos] = useState<YouTubeVideo[]>([])
   const [shortsVideos, setShortsVideos] = useState<YouTubeVideo[]>([])
   const [loading, setLoading] = useState(true)
@@ -30,14 +24,14 @@ export function YouTubeVideosSection({
       setLoading(true)
       setError(null)
 
-      console.log("Fetching videos with playlist IDs:", { regularPlaylistId, shortsPlaylistId })
+      console.log("Obteniendo videos del canal:", channelId)
 
       const [regular, shorts] = await Promise.all([
-        fetchPlaylistVideos(regularPlaylistId, apiKey),
-        fetchPlaylistVideos(shortsPlaylistId, apiKey),
+        fetchChannelVideos(channelId, apiKey, 5, false), // Videos regulares
+        fetchChannelVideos(channelId, apiKey, 5, true), // Shorts
       ])
 
-      console.log("Fetched videos:", {
+      console.log("Videos obtenidos:", {
         regularCount: regular.length,
         shortsCount: shorts.length,
         regularSample: regular.length > 0 ? regular[0] : null,
@@ -45,18 +39,18 @@ export function YouTubeVideosSection({
       })
 
       if (regular.length === 0 && shorts.length === 0) {
-        setError("No se pudieron cargar los videos. Por favor, verifica los IDs de las playlists y la clave de API.")
+        setError("No se pudieron cargar los videos. Por favor, verifica el ID del canal y la clave de API.")
       } else {
         setRegularVideos(regular)
         setShortsVideos(shorts)
       }
     } catch (err) {
-      console.error("Error loading videos:", err)
+      console.error("Error al cargar videos:", err)
       setError("Ocurrió un error al cargar los videos. Por favor, intenta más tarde.")
     } finally {
       setLoading(false)
     }
-  }, [regularPlaylistId, shortsPlaylistId, apiKey])
+  }, [channelId, apiKey])
 
   useEffect(() => {
     loadVideos()
