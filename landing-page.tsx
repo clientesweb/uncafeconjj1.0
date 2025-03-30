@@ -386,14 +386,14 @@ export default function LandingPage() {
           className="w-full py-16 md:py-24 lg:py-32 bg-gradient-to-b from-[#111122] to-[#0f0f1e]"
           aria-labelledby="videos-title"
         >
-          <div className="container px-4 md:px-6 mb-12">
-            <motion.div
-              className="flex flex-col items-center justify-center space-y-4 text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
+          <motion.div
+            className="container px-4 md:px-6 mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="inline-flex items-center justify-center rounded-full bg-[#e9b11a]/10 px-3 py-1 text-sm font-medium text-[#e9b11a] mb-2">
                 MULTIMEDIA
               </div>
@@ -405,8 +405,8 @@ export default function LandingPage() {
                   Mira los últimos episodios y momentos destacados de Un Café con JJ.
                 </p>
               </div>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
           <YouTubeVideosSection
             regularPlaylistId="PLSwBXxeopk-xySzecvVbfGTqnCTi8QhtE"
             shortsPlaylistId="PLSwBXxeopk-xUhmNW4jOBi8Olkr_4p2Rc"
@@ -449,7 +449,7 @@ export default function LandingPage() {
                 </Link>
                 <Link
                   href="https://instagram.com/uncafeconjj"
-                  className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-3 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] transition-all duration-300 transform hover  rounded-full p-3 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] transition-all duration-300 transform hover:scale-110"
+                  className="text-white hover:text-[#e9b11a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-3 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] transition-all duration-300 transform hover:scale-110"
                   aria-label="Síguenos en Instagram"
                 >
                   <Instagram className="h-7 w-7" aria-hidden="true" />
