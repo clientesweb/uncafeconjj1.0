@@ -17,9 +17,9 @@ import {
   Mic2,
   Play,
   ExternalLink,
-  ChevronDown,
   ArrowRight,
   Menu,
+  Download,
 } from "lucide-react"
 import { TikTok } from "./tiktok-icon"
 import { YouTubeVideosSection } from "./components/youtube-videos-section"
@@ -29,6 +29,7 @@ import { TopBanner } from "./components/top-banner"
 import { LiveStreamPlayer } from "./components/live-stream-player"
 import { YouTubeSubscribeBanner } from "./components/youtube-subscribe-banner"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { usePWAInstall } from "@/hooks/use-pwa-install"
 
 export default function LandingPage() {
   const [activeSection, setActiveSection] = useState("hero")
@@ -49,6 +50,9 @@ export default function LandingPage() {
   // Channel info
   const channelId = "UCc4fHgV3zRgjHxYZJkQdxhw"
   const channelUrl = "https://youtube.com/@jimmyjairala?si=MdNCk5wxBTHMeLOF"
+
+  // PWA Install Hook
+  const { isInstallable, install } = usePWAInstall()
 
   // Handle scroll to update active section
   useEffect(() => {
@@ -130,11 +134,12 @@ export default function LandingPage() {
       {/* Header - Modern Sticky with Glassmorphism */}
       <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${
-          isScrolled ? "bg-[#0f0f1e]/80 backdrop-blur-md border-b border-[#e9b11a]/10" : "bg-transparent"
+          isScrolled ? "bg-[#0f0f1e]/80 backdrop-blur-md border-b border-[#e9b11a]/10" : "bg-[#0f0f1e]"
         }`}
         role="banner"
       >
         <div className="container flex h-20 items-center justify-between">
+          {/* Logo and Mobile Menu */}
           <div className="flex items-center gap-2">
             {/* Mobile Menu */}
             <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
@@ -186,6 +191,18 @@ export default function LandingPage() {
                     <Play className="mr-2 h-4 w-4" />
                     ESCÚCHANOS EN VIVO
                   </Button>
+
+                  {/* Install button for mobile */}
+                  {isInstallable && (
+                    <Button
+                      onClick={install}
+                      variant="outline"
+                      className="mt-4 text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 rounded-full"
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Instalar App
+                    </Button>
+                  )}
                 </nav>
                 <div className="absolute bottom-8 left-6 right-6">
                   <div className="flex justify-between items-center">
@@ -221,7 +238,7 @@ export default function LandingPage() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3" aria-label="Un Café con JJ - Inicio">
               <motion.div
-                className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-[#e9b11a] p-0.5"
+                className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-[#e9b11a] p-0.5"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -235,9 +252,12 @@ export default function LandingPage() {
                   quality={90}
                 />
               </motion.div>
-              <span className="text-xl font-bold text-white">
-                Un Café con <span className="text-[#e9b11a]">JJ</span>
-              </span>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-white">
+                  Un Café con <span className="text-[#e9b11a]">JJ</span>
+                </span>
+                <span className="text-xs text-gray-300">TRINCHERA DEL PENSAMIENTO LIBRE</span>
+              </div>
             </Link>
           </div>
 
@@ -297,7 +317,7 @@ export default function LandingPage() {
                 objectPosition: "center",
               }}
               placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQrJyEwPDY2ODYyTEhMR0BGRlNCRkJHYGFjYWM4OTtBV0VGUElGYWZYZFD/2wBDARUXFyAeIBogHh4gIiAyRzJHMkZGR0dGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkb/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADc/2wBDABQODxIPDRQSEBIXFRQdHx4eHRoaHSQrJyEwPDY2ODYyTEhMR0BGRlNCRkJHYGFjYWM4OTtBV0VGUElGYWZYZFD/2wBDARUXFyAeIBogHh4gIiAyRzJHMkZGR0dGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkZGRkb/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
             />
           </motion.div>
 
@@ -313,6 +333,15 @@ export default function LandingPage() {
             variants={staggerContainer}
           >
             <motion.div className="max-w-[600px]" variants={fadeInUp}>
+              {/* Live badge */}
+              <motion.div
+                className="inline-flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm px-4 py-2 text-sm font-medium text-white mb-6"
+                variants={fadeInUp}
+              >
+                <span className="w-2 h-2 bg-[#e9b11a] rounded-full mr-2"></span>
+                Transmisión en vivo de lunes a viernes
+              </motion.div>
+
               <motion.h1
                 id="hero-title"
                 className="text-5xl font-bold tracking-tighter text-white sm:text-6xl xl:text-7xl/none mb-4"
@@ -320,12 +349,12 @@ export default function LandingPage() {
               >
                 Un Café con <span className="text-[#e9b11a]">JJ</span>
               </motion.h1>
-              <motion.p className="text-[#e9b11a] md:text-xl mb-2 font-semibold" variants={fadeInUp}>
-                TRINCHERA DEL PENSAMIENTO LIBRE
+
+              <motion.p className="text-gray-200 md:text-xl mb-8 leading-relaxed" variants={fadeInUp}>
+                Análisis político, noticias y opinión con Jimmy Jairala. El espacio donde la actualidad se discute con
+                profundidad y sin censura.
               </motion.p>
-              <motion.p className="text-gray-200 md:text-xl mb-8" variants={fadeInUp}>
-                Noticias, análisis y opinión con Jimmy Jairala.
-              </motion.p>
+
               <motion.div className="flex flex-col gap-3 sm:flex-row mb-8" variants={fadeInUp}>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                   <Button
@@ -337,51 +366,19 @@ export default function LandingPage() {
                     VER EN VIVO
                   </Button>
                 </motion.div>
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="h-12 text-white border-[#e9b11a] hover:bg-[#e9b11a]/10 rounded-full"
-                    onClick={() => scrollToSection("programa")}
-                  >
-                    PROGRAMACIÓN
-                  </Button>
-                </motion.div>
               </motion.div>
-              <motion.div className="flex flex-wrap gap-5" role="list" aria-label="Redes sociales" variants={fadeInUp}>
-                {[
-                  { icon: Facebook, href: "https://facebook.com/uncafeconjj", label: "Facebook" },
-                  { icon: Instagram, href: "https://instagram.com/uncafeconjj", label: "Instagram" },
-                  { icon: Youtube, href: "https://youtube.com/uncafeconjj", label: "YouTube" },
-                  { icon: Twitter, href: "https://twitter.com/uncafeconjj", label: "Twitter" },
-                  { icon: TikTok, href: "#", label: "TikTok" },
-                ].map((social, index) => (
-                  <motion.div
-                    key={social.label}
-                    whileHover={{ scale: 1.2, rotate: 5 }}
-                    whileTap={{ scale: 0.9 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  >
-                    <Link
-                      href={social.href}
-                      className="text-white hover:text-[#e9b11a] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e9b11a] rounded-full p-2 bg-[#1a1a2e]/50 hover:bg-[#1a1a2e] backdrop-blur-sm"
-                      aria-label={`Síguenos en ${social.label}`}
-                    >
-                      <social.icon className="h-5 w-5" aria-hidden="true" />
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
 
-            {/* Scroll indicator */}
-            <motion.div
-              className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
-            >
-              <p className="text-[#e9b11a] text-sm mb-2">Descubre más</p>
-              <ChevronDown className="h-6 w-6 text-[#e9b11a]" />
+              {/* About program link */}
+              <motion.div className="mt-16" variants={fadeInUp}>
+                <Button
+                  variant="outline"
+                  className="text-white border-white/30 hover:bg-white/10 rounded-full group"
+                  onClick={() => scrollToSection("programa")}
+                >
+                  SOBRE EL PROGRAMA
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </motion.div>
             </motion.div>
           </motion.div>
         </section>
