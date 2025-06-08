@@ -542,8 +542,10 @@ export default function LandingPage() {
                 <div className="relative">
                   <div className="absolute -top-10 -left-10 w-20 h-20 bg-[#e9b11a]/20 rounded-full blur-xl" />
                   <div className="relative z-10">
-                    <h3 className="text-3xl font-bold text-white mb-6">Nuestro Presentador</h3>
-                    <div className="flex items-start gap-6 bg-[#1a1a2e]/50 backdrop-blur-sm p-6 rounded-2xl border border-[#e9b11a]/10">
+                    <h3 className="text-3xl font-bold text-white mb-6">Nuestros Presentadores</h3>
+
+                    {/* Jimmy Jairala */}
+                    <div className="flex items-start gap-6 bg-[#1a1a2e]/50 backdrop-blur-sm p-6 rounded-2xl border border-[#e9b11a]/10 mb-6">
                       <div className="rounded-full bg-[#e9b11a]/20 p-4 shrink-0">
                         <Mic2 className="h-8 w-8 text-[#e9b11a]" />
                       </div>
@@ -553,6 +555,20 @@ export default function LandingPage() {
                           Periodista y analista político con amplia experiencia en medios de comunicación y una visión
                           crítica de la realidad nacional e internacional. Conductor de Un Café con JJ, un espacio para
                           el análisis profundo y el debate constructivo.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Gustavo Espinoza */}
+                    <div className="flex items-start gap-6 bg-[#1a1a2e]/50 backdrop-blur-sm p-6 rounded-2xl border border-[#e9b11a]/10">
+                      <div className="rounded-full bg-[#e9b11a]/20 p-4 shrink-0">
+                        <Mic2 className="h-8 w-8 text-[#e9b11a]" />
+                      </div>
+                      <div>
+                        <h4 className="text-2xl font-bold text-[#e9b11a]">Gustavo Espinoza</h4>
+                        <p className="text-gray-300 mt-3 leading-relaxed">
+                          Periodista y abogado con reconocida trayectoria nacional. Comparte la responsabilidad de las
+                          entrevistas en Un Café con JJ.
                         </p>
                       </div>
                     </div>
@@ -897,4 +913,3 @@ export default function LandingPage() {
     </div>
   )
 }
-
