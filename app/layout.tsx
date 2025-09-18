@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_EC",
     url: "https://uncafeconjj.com",
-    title: "Un Café con JJ - ALTAVOZ",
+    title: "Un Café con JJ",
     description: "Programa de análisis político y actualidad con Jimmy Jairala",
     siteName: "Un Café con JJ",
     images: [
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Un Café con JJ - ALTAVOZ",
+    title: "Un Café con JJ",
     description: "Programa de análisis político y actualidad con Jimmy Jairala",
     creator: "@jimmyjairala",
     images: ["/twitter-image.jpg"],
