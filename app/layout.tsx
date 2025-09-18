@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   metadataBase: new URL("https://uncafeconjj.com"),
   title: {
-    default: "Un Café con JJ - ALTAVOZ",
+    default: "Un Café con JJ",
     template: "%s | Un Café con JJ",
   },
   description:
